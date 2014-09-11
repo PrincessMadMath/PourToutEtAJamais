@@ -46,16 +46,11 @@ public class CircularTable implements Iterable<Integer>
        
        int[] tempTable = new int[table.length*2];
         
-       // Copier tous les elements au debut du tableau sauf le premier
-       for (int i = 1 ; i < size ; i++){
-           tempTable[i-1] = get(i);
+       // On copie tous les elements dans le nouveau tableau
+       for( int i = 0 ; i < size ; i++){
+           tempTable[i] = get(i);
        }
-       // Ajout du dernier element a la fin du tableau
-       startindex = tempTable.length -1;
-       tempTable[startindex] = get(0);
-
        table = tempTable;
-
    }
 
  
@@ -75,15 +70,15 @@ public class CircularTable implements Iterable<Integer>
         if(size == table.length){
             doubleSize();
         }
-        
-        // Ajout au debut du tableau
-        if( index == 0 ){
-            if(startindex - 1 < 0){
-                table[startindex -1] = item;
-            }
-            
+
+        // On pousse la table de 1 pour faire de la place au nouvel element
+        for(int i = size; i > index ; i-- ){
+            table[i] = get(i-1);
         }
-        else if(){
+        
+        //Insertion du nouvel element
+        table[index] = item;
+
         size++; // TODO : MAYBE ?
    }
 
@@ -99,6 +94,13 @@ public class CircularTable implements Iterable<Integer>
 	   }
 	   size--;
    }
+   
+    public void printTable(){
+        
+        for( int tableElement : table){
+            System.out.println(tableElement);
+        }
+    }
 
    // Methode requise par l'interface Iterable
    public Iterator<Integer> iterator() 
@@ -174,12 +176,11 @@ public class CircularTable implements Iterable<Integer>
       
       System.out.println("Forward list: ");
       
-	  //A completer, impression des elements de circularListForward
-      
-      
-      System.out.println("\n");
+     //A completer, impression des elements de circularListForward
+     circularListForward.printTable();
+     System.out.println("\n");
 
-	  System.out.println("Forward list after edition: ");
+     System.out.println("Forward list after edition: ");
       circularListForward.remove(0);
       circularListForward.remove(0);
       circularListForward.remove(0);
@@ -188,31 +189,30 @@ public class CircularTable implements Iterable<Integer>
       circularListForward.append(2);
 
       
-      //A completer, impression des elements de circularListForward apr�s edition
-	  
+      //impression des elements de circularListForward apr�s edition
+      circularListForward.printTable();
 	  
 	  
       System.out.println("Reverse list: ");
       
-	   //A completer, impression des elements de circularListReverse
-      
-      System.out.println("\n");
+    //impression des elements de circularListReverse
+    circularListReverse.printTable();
+    System.out.println("\n");
 
-      System.out.println("Mod3 list: ");
+    System.out.println("Mod3 list: ");
       
-	  //A completer, impression des elements de circularListMod3
-    
-      
-      System.out.println("\n");
+    //impression des elements de circularListMod3
+    circularListMod3.printTable();
+    System.out.println("\n");
 
       for (int i=0; i<9; i++)
          circularListForward.remove(0);
       
-      System.out.println("Forward list after edition and removal: ");
+    System.out.println("Forward list after edition and removal: ");
       
-      //A completer, impression des elements de circularListForward      
-      
-      System.out.println("\n");
+    //impression des elements de circularListForward      
+    circularListForward.printTable();
+    System.out.println("\n");
    }
    
 }
