@@ -13,9 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="ReadMe.txt" />
+    <Filter Include="data">
+      <UniqueIdentifier>{c0d5da4b-b7f7-4fad-9118-94c7aae70537}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -24,5 +24,37 @@
     <ClCompile Include="tp1.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\test1.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test2.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test3.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test4.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test5.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test6.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test7.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test8.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test9.bmp">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\test10.bmp">
+      <Filter>data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

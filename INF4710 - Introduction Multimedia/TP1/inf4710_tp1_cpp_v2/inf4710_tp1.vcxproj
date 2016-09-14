@@ -82,11 +82,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <Text Include="ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tp1.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\test1.png" />
+    <Image Include="data\test10.bmp" />
+    <Image Include="data\test2.png" />
+    <Image Include="data\test3.png" />
+    <Image Include="data\test4.png" />
+    <Image Include="data\test5.png" />
+    <Image Include="data\test6.png" />
+    <Image Include="data\test7.png" />
+    <Image Include="data\test8.jpg" />
+    <Image Include="data\test9.bmp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
