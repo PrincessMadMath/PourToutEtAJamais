@@ -6,6 +6,11 @@ using ImagePathFlag = std::pair<std::string,int>; // first = image path, second 
 void ghettoTestEncode();
 
 int main(int /*argc*/, char** /*argv*/) {
+
+	// Slide property
+	size_t n1 = 9;
+	size_t N = 18;
+
     try {
         // note: by default, imread always returns 3-ch images unless the cv::IMREAD_GRAYSCALE flag is set (here we hardcode it based on prior knowledge)
         const std::vector<ImagePathFlag> vsTestImages = {
@@ -25,6 +30,33 @@ int main(int /*argc*/, char** /*argv*/) {
             if(oInputImg.empty())
                 CV_Error_(-1,("Could not load image at '%s', check local paths",oImagePathFlag.first.c_str()));
 
+			std::vector<uint8_t> formatSignal = format_signal(oInputImg);
+
+			std::vector<LZ77Code> encodeSignal = lz77_encode(formatSignal, N, n1);
+
+			std::vector<uint8_t> decode = lz77_decode(encodeSignal, N, n1);
+
+			std::cout << "\n***** New Data *******";
+			std::cout << "\nTaille plain (byte): " << (formatSignal.size());
+			std::cout << "\nTaille encode (byte): " << (encodeSignal.size());
+			double taux = 1.0 - (double)encodeSignal.size() / (double)formatSignal.size();
+			std::cout << "\nTaux compression: " << std::to_string(taux);
+
+			if (decode.size() > formatSignal.size())
+			{
+				decode.pop_back();
+			}
+
+			//cv::Mat oOutputImg = reformat_image(decode, oInputImg.size());
+			/*
+			bool areImageEquals = std::equal(oInputImg.begin<uchar>(), oInputImg.end<uchar>(), oOutputImg.begin<uchar>());
+			if (areImageEquals)
+			{
+				std::cout << "Yay!\n";
+			}
+			else {
+				std::cout << "Ohhhh :(\n";
+			}*/
 			
             // ... @@@@ TODO (make sure decoding also provides the original image!)
             
@@ -37,8 +69,8 @@ int main(int /*argc*/, char** /*argv*/) {
     catch(const std::runtime_error& e) {
         std::cerr << "Caught std::runtime_error: " << e.what() << std::endl;
     }
-    catch(...) {
-        std::cerr << "Caught unhandled exception." << std::endl;
+    catch(const std::exception e) {
+        std::cerr << "Caught unhandled exception." << e.what() << std::endl;
     }
     return 0;
 }

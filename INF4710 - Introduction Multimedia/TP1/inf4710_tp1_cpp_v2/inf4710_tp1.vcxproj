@@ -86,6 +86,8 @@
     <ClCompile Include="tp1.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="data\pixel.png" />
+    <Image Include="data\pixelArt.png" />
     <Image Include="data\test1.png" />
     <Image Include="data\test10.bmp" />
     <Image Include="data\test2.png" />

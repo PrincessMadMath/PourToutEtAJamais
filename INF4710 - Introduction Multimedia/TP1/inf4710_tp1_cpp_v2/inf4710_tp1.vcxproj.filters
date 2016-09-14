@@ -56,5 +56,11 @@
     <Image Include="data\test10.bmp">
       <Filter>data</Filter>
     </Image>
+    <Image Include="data\pixel.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\pixelArt.png">
+      <Filter>data</Filter>
+    </Image>
   </ItemGroup>
 </Project>

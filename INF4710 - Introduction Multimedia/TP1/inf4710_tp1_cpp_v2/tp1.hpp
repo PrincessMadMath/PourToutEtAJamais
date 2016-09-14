@@ -152,7 +152,7 @@ inline LZ77Code searchPartial(const std::vector<uint8_t>& vSignal, size_t encode
 	bool smaller = lookingIndex < upperIndex;
 
 	// sorry...
-	while ((lookingIndex<0) || (lookingIndex < upperIndex && lookingIndex < vSignal.size()))
+	while ((lookingIndex<0) || (lookingIndex < upperIndex && lookingIndex < vSignal.size() && encodeIndex + currentLength <  vSignal.size()))
 	{
 		uint8_t symbolInDictionary = 0;
 		if (lookingIndex >= 0)
@@ -175,9 +175,9 @@ inline LZ77Code searchPartial(const std::vector<uint8_t>& vSignal, size_t encode
 	// Get next symbol (the one not encoded)
 	uint8_t nextSymbol;
 	size_t nextSymbokIndex = encodeIndex + currentLength;
-	if (nextSymbokIndex > vSignal.size())
+	if (nextSymbokIndex >= vSignal.size())
 	{
-		nextSymbol = NULL;
+		nextSymbol = UINT8_MAX;
 	}
 	else
 	{
@@ -227,15 +227,40 @@ inline std::vector<uint8_t> lz77_decode(const std::vector<LZ77Code>& vCode, size
 		vSignal.push_back(currentCode.nNextSymbol);
 	}
 
-
     return vSignal;
 }
 
 inline std::vector<uint8_t> format_signal(const cv::Mat& oInputImage) {
     CV_Assert(!oInputImage.empty() && oInputImage.isContinuous() && (oInputImage.type()==CV_8UC1 || oInputImage.type()==CV_8UC3));
     std::vector<uint8_t> vSignal;
-    // ... @@@@@ TODO (put oInputImage data in vSignal in correct order/format)
-    return vSignal;
+
+	// If greyscale
+	if (oInputImage.type() == CV_8UC1) {
+		int nbPixel = oInputImage.rows * oInputImage.cols;
+		for (int byteCounter = 0; byteCounter < nbPixel; ++byteCounter)
+		{
+			uint8_t currentPixel = (uint8_t)*(oInputImage.data + byteCounter * sizeof(uint8_t));
+			vSignal.push_back(currentPixel);
+		}
+	}
+	// If color
+	else {
+		// For B, G, R
+		int nbOfColor = 3;
+		int nbPixel = oInputImage.rows * oInputImage.cols * nbOfColor;
+
+		for (int colorIndex = 0; colorIndex < nbOfColor; ++colorIndex)
+		{
+			for (int byteCounter = colorIndex; byteCounter < nbPixel; byteCounter+=nbOfColor)
+			{
+				uint8_t currentPixel = (uint8_t)*(oInputImage.data + byteCounter * sizeof(uint8_t));
+				vSignal.push_back(currentPixel);
+			}
+		}
+	}
+
+	
+	return vSignal;
 }
 
 inline cv::Mat reformat_image(const std::vector<uint8_t>& vSignal, const cv::Size& oOrigImageSize) {
