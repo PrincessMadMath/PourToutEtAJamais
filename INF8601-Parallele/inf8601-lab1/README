@@ -1,0 +1,22 @@
+Sources du laboratoire INF4730
+
+== Dépendances ==
+
+* Ubuntu
+
+  apt-get install build-essential libtbb-dev pkg-config
+
+* Fedora
+
+  yum gcc gcc-c++ automake glibc-devel tbb-devel
+
+== Notes de compilation ==
+
+Par défaut, l'optimisation -O2 est utilisé, nécessaire pour obtenir les
+résultats de performance. Si gdb est utilisé pour de débogage, alors le code
+source ne correspondra pas aux instructions.
+
+Pour compiler avec les options de débogage:
+
+ ./configure --enable-debug
+
