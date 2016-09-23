@@ -98,6 +98,12 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
 	info.image = image;
 
 	/* 2. Lancement du calcul parallèle principal avec draw_dragon_worker */
+    
+    for(int draw_index = 0; draw_index < nb_thread; ++draw_index)
+    {
+        info.id = draw_index;
+        data[draw_index] = info;
+    }
 
 	/* 3. Attendre la fin du traitement */
 
@@ -162,7 +168,7 @@ int dragon_limits_pthread(limits_t *limits, uint64_t size, int nb_thread)
         uint64_t start = threadIndex * chunkSize;
         uint64_t end = start + chunkSize;
         
-        if(threadIndex = (nb_thread-1)){
+        if(threadIndex == (nb_thread-1)){
             end += leftOver;
         }
         struct limit_data temp = {threadIndex, start, end, master};
@@ -175,6 +181,13 @@ int dragon_limits_pthread(limits_t *limits, uint64_t size, int nb_thread)
     
     for(int threadIndex = 0; threadIndex < nb_thread; ++ threadIndex){
         pthread_join(threads[threadIndex], NULL);
+        
+        if(threadIndex == 0){
+            master = thread_data[0].piece;
+        }
+        else{
+            piece_merge(&master, thread_data[threadIndex].piece);
+        }
     }
 
 done:
