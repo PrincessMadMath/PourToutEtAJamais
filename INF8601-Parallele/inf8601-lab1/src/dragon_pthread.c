@@ -58,8 +58,6 @@ void *dragon_draw_worker(void *data)
 
 int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height, uint64_t size, int nb_thread)
 {
-	TODO("dragon_draw_pthread");
-
 	pthread_t *threads = NULL;
 	pthread_barrier_t barrier;
 	limits_t lim;
@@ -163,8 +161,6 @@ void *dragon_limit_worker(void *data)
  */
 int dragon_limits_pthread(limits_t *limits, uint64_t size, int nb_thread)
 {
-	TODO("dragon_limits_pthread");
-
 	int ret = 0;
 	int i;
 	pthread_t *threads = NULL;
