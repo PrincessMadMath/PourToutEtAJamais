@@ -30,9 +30,29 @@ void printf_threadsafe(char *format, ...)
 
 void *dragon_draw_worker(void *data)
 {
+    struct draw_data *info = (struct draw_data *) data;
+    
 	/* 1. Initialiser la surface */
+    
+    int areaChunk = (info->dragon_width * info->dragon_height) / info->nb_thread;
+    init_canvas(areaChunk*info->id, areaChunk*(info->id + 1), info->dragon, -1);
+    
+    pthread_barrier_wait(info->barrier);
+    
 	/* 2. Dessiner le dragon */
+    uint64_t start = info->id * info->size / info->nb_thread;
+    uint64_t end = (info->id + 1) * info->size / info->nb_thread;
+    dragon_draw_raw(start, end, info->dragon, info->dragon_width, info->dragon_height, info->limits, info->id);
+    
+    pthread_barrier_wait(info->barrier);
+    
 	/* 3. Effectuer le rendu final */
+    
+    // Scale dragon to fit the final image
+    int heightChunk = (info->image_height) / info->nb_thread;
+    
+	scale_dragon(heightChunk * info->id, heightChunk * (info->id + 1), info->image, info->image_width, info->image_height, info->dragon, info->dragon_width, info->dragon_height, info->palette);
+    
 	return NULL;
 }
 
@@ -58,6 +78,7 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
 		goto err;
 
 	/* 1. Initialiser barrier. */
+    pthread_barrier_init(&barrier, NULL, nb_thread);
 
 	if (dragon_limits_pthread(&lim, size, nb_thread) < 0)
 		goto err;
@@ -103,11 +124,18 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
     {
         info.id = draw_index;
         data[draw_index] = info;
+        
+        pthread_create(&threads[draw_index], NULL, dragon_draw_worker, (void*)&data[draw_index]);
     }
 
 	/* 3. Attendre la fin du traitement */
-
-	/* 4. Destruction des variables (à compléter). */ 
+    for(int draw_index = 0; draw_index < nb_thread; ++draw_index)
+    {
+        pthread_join(threads[draw_index], NULL);
+    }
+    
+	/* 4. Destruction des variables. */ 
+    pthread_barrier_destroy(&barrier);
 
 done:
 	FREE(data);
