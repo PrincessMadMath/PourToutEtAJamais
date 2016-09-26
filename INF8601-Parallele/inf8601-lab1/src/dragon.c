@@ -65,7 +65,7 @@ int dragon_draw_raw(uint64_t start, uint64_t end, char *dragon, int width, int h
 
 	if (end == start)
 		return 0;
-
+		
 	xy_t position;
 	xy_t orientation;
 	int i, j;

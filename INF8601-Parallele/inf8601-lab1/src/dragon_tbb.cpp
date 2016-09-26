@@ -16,6 +16,8 @@ extern "C" {
 #include "tbb/tbb.h"
 #include "TidMap.h"
 
+static TidMap* tidMap = NULL;
+
 using namespace std;
 using namespace tbb;
 
@@ -60,6 +62,8 @@ public:
     }
     
     void operator()(const blocked_range<int>& range) const{
+		//printf("Start: %d, End: %d", range.begin(), range.end());
+		printf("TBB id: %d\n", tidMap->getIdFromTid(gettid()));
         dragon_draw_raw(range.begin(), range.end(), info.dragon, info.dragon_width, info.dragon_height, info.limits, id);  
     }    
 };
@@ -116,6 +120,8 @@ int dragon_draw_tbb(char **canvas, struct rgb *image, int width, int height, uin
 	int scale;
 	int deltaJ;
 	int deltaI;
+	
+	tidMap = new TidMap(nb_thread);
 
 	struct palette *palette = init_palette(nb_thread);
 	if (palette == NULL)

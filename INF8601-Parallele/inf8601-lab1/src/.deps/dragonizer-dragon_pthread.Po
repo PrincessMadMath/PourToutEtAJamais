@@ -23,7 +23,7 @@ dragonizer-dragon_pthread.o: dragon_pthread.c /usr/include/stdc-predef.h \
  /usr/include/bits/stdio.h \
  /usr/lib/gcc/x86_64-redhat-linux/6.1.1/include/stdint.h \
  /usr/include/stdint.h /usr/include/bits/wchar.h /usr/include/inttypes.h \
- color.h dragon_pthread.h
+ color.h dragon_pthread.h utils.h
 
 /usr/include/stdc-predef.h:
 
@@ -126,3 +126,5 @@ dragon.h:
 color.h:
 
 dragon_pthread.h:
+
+utils.h:

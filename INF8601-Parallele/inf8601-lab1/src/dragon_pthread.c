@@ -10,10 +10,12 @@
 #include <pthread.h>
 #include <stdarg.h>
 #include <string.h>
+#include <time.h>
 
 #include "dragon.h"
 #include "color.h"
 #include "dragon_pthread.h"
+#include "utils.h"
 
 pthread_mutex_t mutex_stdout;
 
@@ -32,6 +34,8 @@ void *dragon_draw_worker(void *data)
 {
     struct draw_data *info = (struct draw_data *) data;
     
+    clock_t start_time = clock();
+    
 	/* 1. Initialiser la surface */
     
     int areaChunk = (info->dragon_width * info->dragon_height) / info->nb_thread;
@@ -44,6 +48,7 @@ void *dragon_draw_worker(void *data)
     uint64_t end = (info->id + 1) * info->size / info->nb_thread;
     dragon_draw_raw(start, end, info->dragon, info->dragon_width, info->dragon_height, info->limits, info->id);
     
+    
     pthread_barrier_wait(info->barrier);
     
 	/* 3. Effectuer le rendu final */
@@ -52,6 +57,8 @@ void *dragon_draw_worker(void *data)
     int heightChunk = (info->image_height) / info->nb_thread;
     
 	scale_dragon(heightChunk * info->id, heightChunk * (info->id + 1), info->image, info->image_width, info->image_height, info->dragon, info->dragon_width, info->dragon_height, info->palette);
+    
+    printf_threadsafe("Thread %d: %d ms\n",  gettid(), (clock() - start_time)*1000/CLOCKS_PER_SEC);
     
 	return NULL;
 }
@@ -63,13 +70,11 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
 	limits_t lim;
 	struct draw_data info;
 	char *dragon = NULL;
-	int i;
 	int scale_x;
 	int scale_y;
 	struct draw_data *data = NULL;
 	struct palette *palette = NULL;
 	int ret = 0;
-	int r;
 
 	palette = init_palette(nb_thread);
 	if (palette == NULL)
@@ -117,6 +122,8 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
 	info.image = image;
 
 	/* 2. Lancement du calcul parallèle principal avec draw_dragon_worker */
+	
+
     
     for(int draw_index = 0; draw_index < nb_thread; ++draw_index)
     {
@@ -131,6 +138,7 @@ int dragon_draw_pthread(char **canvas, struct rgb *image, int width, int height,
     {
         pthread_join(threads[draw_index], NULL);
     }
+    
     
 	/* 4. Destruction des variables. */ 
     pthread_barrier_destroy(&barrier);
@@ -162,7 +170,6 @@ void *dragon_limit_worker(void *data)
 int dragon_limits_pthread(limits_t *limits, uint64_t size, int nb_thread)
 {
 	int ret = 0;
-	int i;
 	pthread_t *threads = NULL;
 	struct limit_data *thread_data = NULL;
 	piece_t master;
@@ -214,12 +221,8 @@ int dragon_limits_pthread(limits_t *limits, uint64_t size, int nb_thread)
         }
     }
 
-done:
 	FREE(threads);
 	FREE(thread_data);
 	*limits = master.limits;
 	return ret;
-err:
-	ret = -1;
-	goto done;
 }
