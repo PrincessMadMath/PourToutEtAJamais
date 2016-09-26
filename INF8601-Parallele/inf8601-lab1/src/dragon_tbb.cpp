@@ -59,7 +59,7 @@ public:
     }
     
     void operator()(const blocked_range<int>& range) const{
-        dragon_draw_raw(range.begin(), range.end(), info.dragon, info.dragon_width, info.dragon_height, info.limits, id);  
+        dragon_draw_raw(range.begin(), range.end(), info.dragon, info.dragon_width, info.dragon_height, info.limits, 0);  
     }    
 };
 
@@ -123,7 +123,6 @@ int dragon_draw_tbb(char **canvas, struct rgb *image, int width, int height, uin
 	/* 1. Calculer les limites du dragon */
 	dragon_limits_tbb(&limits, size, nb_thread);
 
-	task_scheduler_init init(nb_thread);
 
 	dragon_width = limits.maximums.x - limits.minimums.x;
 	dragon_height = limits.maximums.y - limits.minimums.y;
@@ -154,22 +153,20 @@ int dragon_draw_tbb(char **canvas, struct rgb *image, int width, int height, uin
 	data.deltaJ = deltaJ;
 	data.palette = palette;
 	data.tid = (int *) calloc(nb_thread, sizeof(int));
-
+	
+	task_scheduler_init task(nb_thread);
+	
 	/* 2. Initialiser la surface : DragonClear */
     DragonClear dragonClear = DragonClear(dragon);
     parallel_for(blocked_range<int>(0, dragon_surface), dragonClear);
-    printf("%s", "Done clear");
-
 
 	/* 3. Dessiner le dragon : DragonDraw */
     DragonDraw dragonDraw = DragonDraw(data);
     parallel_for(blocked_range<int>(0, size-1), dragonDraw);
-    printf("%s", "Done draw");
    
 	/* 4. Effectuer le rendu final */
     DragonRender dragonRender = DragonRender(data);
     parallel_for(blocked_range<int>(0, height), dragonRender);
-    printf("%s", "Done render");
 
 	init.terminate();
 
@@ -188,15 +185,16 @@ int dragon_limits_tbb(limits_t *limits, uint64_t size, int nb_thread)
 {
 	
 	DragonLimits lim;
-
+		
 	piece_t piece;
 	piece_init(&piece);
-	*limits = piece.limits;
-    
+	
     lim.piece = &piece;
     
+    task_scheduler_init task(nb_thread);
     parallel_reduce(blocked_range<uint64_t>(0, size), lim);
-    
+		
+	*limits = lim.piece->limits;
     
 	return 0;
 }
