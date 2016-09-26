@@ -45,12 +45,13 @@ public:
 class DragonDraw {
 private:
     draw_data info;
-    int id = 0;
+    int id;
     
 public:
     
     DragonDraw(draw_data drawData){
         info = drawData;
+        id = 0;
     }
     
     DragonDraw(const DragonDraw& dragonDraw){
@@ -59,7 +60,7 @@ public:
     }
     
     void operator()(const blocked_range<int>& range) const{
-        dragon_draw_raw(range.begin(), range.end(), info.dragon, info.dragon_width, info.dragon_height, info.limits, 0);  
+        dragon_draw_raw(range.begin(), range.end(), info.dragon, info.dragon_width, info.dragon_height, info.limits, id);  
     }    
 };
 
@@ -123,7 +124,6 @@ int dragon_draw_tbb(char **canvas, struct rgb *image, int width, int height, uin
 	/* 1. Calculer les limites du dragon */
 	dragon_limits_tbb(&limits, size, nb_thread);
 
-
 	dragon_width = limits.maximums.x - limits.minimums.x;
 	dragon_height = limits.maximums.y - limits.minimums.y;
 	dragon_surface = dragon_width * dragon_height;
@@ -152,9 +152,11 @@ int dragon_draw_tbb(char **canvas, struct rgb *image, int width, int height, uin
 	data.deltaI = deltaI;
 	data.deltaJ = deltaJ;
 	data.palette = palette;
+	data.id = 0;
+	data.barrier = NULL;
 	data.tid = (int *) calloc(nb_thread, sizeof(int));
 	
-	task_scheduler_init task(nb_thread);
+	task_scheduler_init init(nb_thread);
 	
 	/* 2. Initialiser la surface : DragonClear */
     DragonClear dragonClear = DragonClear(dragon);
