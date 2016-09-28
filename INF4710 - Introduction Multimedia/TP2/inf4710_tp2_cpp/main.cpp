@@ -16,6 +16,7 @@
 #include "quantif_inv.h"
 #include "zigzag.h"
 #include "zigzag_inv.h"
+#include <opencv\highgui.h>
 
 #define USE_SUBSAMPLING 1
 #define USE_QUANT_QUALITY 100
@@ -42,11 +43,22 @@ int main(int /*argc*/, char** /*argv*/) {
             const std::vector<cv::Mat_<uchar>> vBlocks_Y = decoup(Y);
             const std::vector<cv::Mat_<uchar>> vBlocks_Cb = decoup(Cb);
             const std::vector<cv::Mat_<uchar>> vBlocks_Cr = decoup(Cr);
+
+			/* Test de-conversion */
+			cv::Mat image_unconvert;
+			conv_ycbcr2rgb(Y, Cb, Cr, USE_SUBSAMPLING, image_unconvert);
+			cv::Mat diff;
+			cv::absdiff(oInput, image_unconvert, diff);
+
             std::vector<cv::Mat_<uchar>> vBlocks;
             vBlocks.insert(vBlocks.end(),vBlocks_Y.begin(),vBlocks_Y.end());
             vBlocks.insert(vBlocks.end(),vBlocks_Cb.begin(),vBlocks_Cb.end());
             vBlocks.insert(vBlocks.end(),vBlocks_Cr.begin(),vBlocks_Cr.end());
             std::vector<cv::Mat_<float>> vDCTBlocks(vBlocks.size());
+
+			/* Test block - unblock*/
+			//const cv::Mat_<uchar> test = decoup_inv(vBlocks, Y.size());
+
             for(size_t b=0; b<vBlocks.size(); ++b)
                 vDCTBlocks[b] = dct(vBlocks[b]);
             std::vector<cv::Mat_<short>> vQuantifDCTBlocks(vDCTBlocks.size());
@@ -102,3 +114,5 @@ int main(int /*argc*/, char** /*argv*/) {
     }
     return 1;
 }
+
+
