@@ -44,10 +44,11 @@ public class Client {
 	private ServerInterface localServerStub = null;
 	private ServerInterface distantServerStub = null;
 	
+	
 	private String CloudFolderName = "dropbox_improved";
 	private String ClientIdFile = "clientid.txt";
 	
-	private UUID clientId;
+	private UUID clientId = null;
 	
 	// Easy switch for local and remote
 	private ServerInterface getProxy(){
@@ -94,13 +95,19 @@ public class Client {
 	
 	private void doOperation(String command, String[] args) throws Exception	{
 		ServerInterface proxy = getProxy();
+		
+		OperationResponse response = null;
 				
 		switch(command.toLowerCase()){
 		case "generateclientid":
 			if (args.length != 0) {
 				throw new Exception("Invalid arguments");
 			}
-			UUID clientId = proxy.generateclientid();
+			clientId = proxy.generateclientid();
+			System.out.println(clientId);
+			break;
+			
+		case "myid":
 			System.out.println(clientId);
 			break;
 			
@@ -108,7 +115,7 @@ public class Client {
 			if (args.length != 1) {
 				throw new Exception("Invalid arguments");
 			}
-			OperationResponse response = proxy.create(args[0]);
+			response = proxy.create(args[0]);
 			System.out.println(response.Details);
 			break;
 			
@@ -131,9 +138,9 @@ public class Client {
 			List<FileData> dataList = proxy.syncLocalDir();
 			
 			for(FileData file : dataList){
+				System.out.println("Download file: " + file.Name);
 				WriteFile(file);
 			}
-			
 			
 			break;
 			
@@ -144,6 +151,7 @@ public class Client {
 			
 			String name = args[0];
 			
+			// If file exist locally
 			if(IsFileExist(name))
 			{
 				FileData localData = GetFileData(name);
@@ -153,6 +161,12 @@ public class Client {
 				if(remoteData != null)
 				{
 					WriteFile(remoteData);
+					System.out.println("Download new version of file: " + name);
+
+				}
+				else
+				{
+					System.out.println("Already latest version of file: " + name);
 				}		
 			}
 			else{
@@ -160,6 +174,7 @@ public class Client {
 				if(remoteData != null)
 				{
 					WriteFile(remoteData);
+					System.out.println("Downloaded file: " + name);
 				}
 				else{
 					System.out.println("File does not exist on server!");
@@ -173,12 +188,40 @@ public class Client {
 			if (args.length != 1) {
 				throw new Exception("Invalid arguments");
 			}
+			String fileNameToLock = args[0];
+			
+			if(IsFileExist(fileNameToLock))
+			{			
+				FileData fileToGetChecksum = GetFileData(fileNameToLock);
+				response = proxy.lock(fileNameToLock, clientId, fileToGetChecksum.Md5);
+				System.out.println(response.Details);
+			}
+			else
+			{
+				System.out.println("What are you trying to lock, I don't even... (you don't have the file: " + fileNameToLock + " locally mate!)");
+			}
+
+			
 			break;
 			
 		case "push":
 			if (args.length != 1) {
 				throw new Exception("Invalid arguments");
 			}
+			
+			String fileNameToPush = args[0];
+			
+			if(IsFileExist(fileNameToPush))
+			{
+				FileData fileToPush = GetFileData(fileNameToPush);
+				response = proxy.push(fileNameToPush, fileToPush.Data ,clientId);
+				System.out.println(response.Details);
+			}
+			else
+			{
+				System.out.println("What are you trying to push, I don't even... (you don't have the file: " + fileNameToPush+ " locally mate!)");
+			}
+
 			break;	
 			
 		default:

@@ -1,0 +1,20 @@
+On a pas setup sur OpenStack pour gestion fichiers: en local c'est plus facile à tester
+
+1. Compiler
+
+ant
+
+2. Lancer rmi registre
+
+cd bin
+rmiregistry&
+
+3. Lancer server
+
+./serveur
+
+4. Utiliser client*
+
+./client (dummy ip address) [command] [args]
+
+*si on voudrait l'utiliser sur OpenStack suffit de mettre une vrai adresse (+petite modif dans code)

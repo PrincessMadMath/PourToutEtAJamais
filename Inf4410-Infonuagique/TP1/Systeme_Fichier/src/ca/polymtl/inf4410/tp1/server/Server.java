@@ -112,6 +112,7 @@ public class Server implements ServerInterface {
 			}
 		}
 	}
+	
 
 	@Override
 	public List<FileMeta> list() throws RemoteException {
@@ -185,7 +186,7 @@ public class Server implements ServerInterface {
 				currentFile = GetFileData(name);
 				
 				// If client have latest version
-				if(currentFile.Md5 == checksum)
+				if(currentFile.Md5.equals(checksum))
 				{
 					return null;
 				}
@@ -205,16 +206,70 @@ public class Server implements ServerInterface {
 
 	@Override
 	public OperationResponse lock(String name, UUID clientId, String checksum)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	{
+		FileMeta wantedFile = filesMata.get(name);
+		
+		if(wantedFile == null){
+			return new OperationResponse(false, "Can't lock a file that doesn't exist: " + name);
+		}
+		
+		synchronized(wantedFile){
+			if(wantedFile.OwnerId != null && wantedFile.OwnerId != clientId)
+			{
+				return new OperationResponse(false, "File is already locked by someone else" + name);
+			}
+			else
+			{
+				try
+				{
+					wantedFile.OwnerId = clientId;
+					FileData currentFile = GetFileData(name);
+					if(currentFile.Md5.equals(checksum))
+					{
+						return new OperationResponse(true, "Lock succeed on : " + name);
+					}
+					else
+					{
+						return new OperationResponse(true, "Lock succeed on : " + name + ", but you don't have the latest version");
+					}
+				}
+				catch (IOException e) {
+					e.printStackTrace();
+					return new OperationResponse(true, "Error while locking: " + e);
+				}			
+			}
+		}
 	}
 
 	@Override
-	public OperationResponse push(String name, byte[] data, String clientId)
-			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+	public OperationResponse push(String name, byte[] data, UUID clientId)
+	{
+		FileMeta wantedFile = filesMata.get(name);
+		
+		if(wantedFile == null){
+			return new OperationResponse(false, "This file does not exist: " + name);
+		}
+		
+		synchronized(wantedFile){
+			if(!wantedFile.OwnerId.equals(clientId))
+			{
+				return new OperationResponse(false, "You don't have the required lock to push on the file: " + name + "| ownwer : " + wantedFile.OwnerId + "| you: " + clientId);
+			}
+			else
+			{
+				try
+				{
+					Path path = Paths.get(GetPath(name));
+					Files.write(path, data);
+					wantedFile.OwnerId = null;
+					
+					return new OperationResponse(true, "Update pushed on: " + name);
+				} 
+				catch (IOException e) {
+				return new OperationResponse(false, "Failed creating file: " + name + "\n" + e.getMessage());
+				}
+			}
+		}	
 	}
 	
 }

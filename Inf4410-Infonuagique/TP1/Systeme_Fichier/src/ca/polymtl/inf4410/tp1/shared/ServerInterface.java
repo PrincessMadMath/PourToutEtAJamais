@@ -11,5 +11,5 @@ public interface ServerInterface extends Remote {
 	List<FileData> syncLocalDir() throws RemoteException;
 	FileData get(String name, String checksum) throws RemoteException;
 	OperationResponse lock(String name, UUID clientId, String checksum)  throws RemoteException;
-	OperationResponse push(String name, byte[] data, String clientId) throws RemoteException;
+	OperationResponse push(String name, byte[] data, UUID clientId) throws RemoteException;
 }
