@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="512"
+   height="512"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="mask-test.svg"
+   inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/mask-test.png"
+   inkscape:export-xdpi="43.950001"
+   inkscape:export-ydpi="43.950001">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient4407">
+      <stop
+         style="stop-color:#00ff00;stop-opacity:1;"
+         offset="0"
+         id="stop4409" />
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="1"
+         id="stop4411" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4407"
+       id="linearGradient4413"
+       x1="56.933575"
+       y1="334.90588"
+       x2="568.93357"
+       y2="334.90588"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.1823605"
+     inkscape:cx="244.85113"
+     inkscape:cy="257.33769"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1280"
+     inkscape:window-height="776"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-56.933575,-78.905884)">
+    <rect
+       style="fill:url(#linearGradient4413);fill-opacity:1;stroke:none"
+       id="rect3094"
+       width="512"
+       height="512"
+       x="56.933575"
+       y="78.905884"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/mask-test-complete.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       sodipodi:type="star"
+       style="fill:#00ffff;fill-opacity:1;stroke:none"
+       id="path3864"
+       sodipodi:sides="5"
+       sodipodi:cx="131.09369"
+       sodipodi:cy="123.79353"
+       sodipodi:r1="68.798767"
+       sodipodi:r2="34.399384"
+       sodipodi:arg1="0.75931712"
+       sodipodi:arg2="1.3876357"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 180.99387,171.15641 -43.63474,-13.53889 -35.89021,28.26984 -0.60762,-45.68285 -37.976907,-25.39776 43.259207,-14.69466 12.4192,-43.966522 27.34328,36.601053 45.65239,-1.775043 -26.36013,37.315352 z"
+       transform="matrix(1.5061156,0,0,1.5061156,209.71044,252.37408)"
+       inkscape:transform-center-x="5.8320728"
+       inkscape:transform-center-y="-4.1825927" />
+    <path
+       sodipodi:type="spiral"
+       style="fill:none;stroke:#ffff00;stroke-width:12.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="path3866"
+       sodipodi:cx="298.5553"
+       sodipodi:cy="313.24506"
+       sodipodi:expansion="1"
+       sodipodi:revolution="3"
+       sodipodi:radius="79.073441"
+       sodipodi:argument="-17.843027"
+       sodipodi:t0="0"
+       d="m 298.5553,313.24506 c 2.12026,3.35002 -3.4697,4.51085 -5.56796,3.52402 -5.68615,-2.67428 -4.92492,-10.55645 -1.48008,-14.65994 6.162,-7.34019 17.53347,-5.80599 23.75192,0.56386 9.12583,9.348 6.73649,24.61356 -2.6078,32.8439 -12.45447,10.96974 -31.73136,7.68945 -41.93588,-4.65174 -12.84136,-15.53013 -8.65432,-38.86738 6.69568,-51.02786 18.5909,-14.72798 46.01373,-9.62613 60.11984,8.73962 16.62356,21.64339 10.6023,53.16652 -10.78356,69.21182 -24.69083,18.52493 -60.32362,11.58139 -78.3038,-12.8275 -20.43023,-27.73494 -12.56253,-67.48374 14.87144,-87.39578 30.77676,-22.33831 74.64605,-13.54513 96.48776,16.91538 24.24843,33.81693 14.52883,81.81002 -18.95932,105.57974"
+       transform="translate(-95.077554,-94.729757)" />
+  </g>
+</svg>

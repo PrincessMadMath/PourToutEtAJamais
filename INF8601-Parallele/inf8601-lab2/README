@@ -1,0 +1,41 @@
+Sources du laboratoire INF4730-lab2
+
+== Dépendances ==
+
+* Ubuntu
+
+  apt-get install build-essential libgomp1 pkg-config freeglut3-dev libglew-dev
+
+* Fedora
+
+  yum install gcc gcc-c++ automake glibc-devel freeglut-devel glew-devel
+
+Un SDK OpenCL est nécessaire. Le logiciel a été testé avec le SDK d'Intel et de
+NVIDIA, mais devrait fonctionner avec toute implémentation respectant le
+standard OpenCL 1.1. Veuillez vous référer aux instructions d'installation du
+SDK choisi. Plusieurs SDK peuvent être installés simultanément.
+
+OpenCLCC est nécessaire pour la compilation du projet. Les utilitaires doivent
+être accessible par la variable d'environnement $PATH.
+
+http://code.google.com/p/openclcc/
+
+== Notes de compilation ==
+
+Tous les avertissements de compilation sont activés par défaut (-Wall).
+
+Autres options utiles:
+
+  --enable-debug : active les options de débogage
+  --with-include : spécifie le chemin d'inclusion d'OpenCL
+                   Ex: --with-include=/usr/local/cuda/include/
+  LDFLAGS        : spécifie l'emplacement de la librairie OpenCL
+                   Ex: LDFLAGS=-L/usr/lib/nvidia
+
+Voici la commande à utiliser pour compiler dans le laboratoire l4712:
+
+  ./configure LDFLAGS=-L/usr/lib64/nvidia --with-include=/usr/local/cuda/include/
+
+Voici la commande à utiliser avec le toolkit AMD:
+
+  ./configure LDFLAGS=-L/opt/AMDAPP/lib/x86_64/ --with-include=/opt/AMDAPP/include/

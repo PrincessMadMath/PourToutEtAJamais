@@ -1,0 +1,13 @@
+sudo apt-get install freeglut3-dev
+fakeroot alien intel-ocl-sdk
+add /usr/lib64 to ldconfig
+chmod a+rx /etc/OpenCL
+chmod a+rx /etc/OpenCL/vendors
+chmod a+r /etc/OpenCL/vendors/*
+
+
+benchmark commands
+Startup overhead
+./src/sinoscope --cmd benchmark --iter 100000 --width 1 --height 1
+Throughput
+./src/sinoscope --cmd benchmark --iter 10 --width 1024 --height 1024 --taylor 1000

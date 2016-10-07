@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="513.37982"
+   height="312.08752"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.1 r9760"
+   sodipodi:docname="heat-sink.svg"
+   inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png"
+   inkscape:export-xdpi="17.591219"
+   inkscape:export-ydpi="17.591219">
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient3799">
+      <stop
+         style="stop-color:#000a32;stop-opacity:1;"
+         offset="0"
+         id="stop3801" />
+      <stop
+         id="stop3807"
+         offset="0.33112162"
+         style="stop-color:#0000ff;stop-opacity:1;" />
+      <stop
+         style="stop-color:#0000ff;stop-opacity:1;"
+         offset="0.63156581"
+         id="stop3809" />
+      <stop
+         style="stop-color:#000a32;stop-opacity:1;"
+         offset="1"
+         id="stop3803" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3818">
+      <stop
+         style="stop-color:#000000;stop-opacity:1;"
+         offset="0"
+         id="stop3820" />
+      <stop
+         style="stop-color:#ff0000;stop-opacity:1;"
+         offset="1"
+         id="stop3822" />
+    </linearGradient>
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.1823605"
+     inkscape:cx="248.87082"
+     inkscape:cy="213.49675"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1280"
+     inkscape:window-height="776"
+     inkscape:window-x="0"
+     inkscape:window-y="24"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-56.087811,-253.44534)">
+    <rect
+       style="fill:#000000;fill-opacity:1;stroke:none"
+       id="rect3094-4"
+       width="512"
+       height="310.70773"
+       x="56.933575"
+       y="254.82515"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/mask-test-complete.png"
+       inkscape:export-xdpi="17.58"
+       inkscape:export-ydpi="17.58" />
+    <rect
+       style="fill:#0000ff;fill-opacity:1;stroke:none"
+       id="rect3780"
+       width="513.37982"
+       height="269.79926"
+       x="56.087811"
+       y="253.44534"
+       inkscape:export-xdpi="8.6731148"
+       inkscape:export-ydpi="8.6731148"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png" />
+    <g
+       id="g3782"
+       transform="matrix(1,0,0,0.78425163,0,113.94272)"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png"
+       inkscape:export-xdpi="8"
+       inkscape:export-ydpi="8">
+      <rect
+         y="206.67566"
+         x="102.13457"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="131.61772"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-4"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="161.10086"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-3"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="190.584"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-5"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="220.06711"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-9"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="249.55025"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-43"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="279.03336"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-8"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="337.99951"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-55"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="367.48264"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-2"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="426.44879"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-83"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="485.41498"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-1"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="514.89801"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-82"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="308.51648"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-00"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="396.96567"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-4-2"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+      <rect
+         y="206.67566"
+         x="455.93188"
+         height="321.45221"
+         width="8.7558565"
+         id="rect3845-3-7"
+         style="fill:#00ff00;fill-opacity:1;stroke:none" />
+    </g>
+    <rect
+       style="fill:#00ff00;fill-opacity:1;stroke:none"
+       id="rect4066"
+       width="427.95746"
+       height="18.39636"
+       x="100.06762"
+       y="522.93359"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png"
+       inkscape:export-xdpi="8"
+       inkscape:export-ydpi="8" />
+    <rect
+       style="fill:#00ff00;fill-opacity:1;stroke:none"
+       id="rect4070"
+       width="240.12094"
+       height="18.67573"
+       x="193.9859"
+       y="529.09607"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png"
+       inkscape:export-xdpi="8"
+       inkscape:export-ydpi="8" />
+    <rect
+       style="fill:#ffff00;fill-opacity:1;stroke:none"
+       id="rect4068"
+       width="144.87755"
+       height="9.1560478"
+       x="239.70461"
+       y="547.61591"
+       inkscape:export-xdpi="8.79"
+       inkscape:export-ydpi="8.79"
+       inkscape:export-filename="/home/francis/workspace/inf4730-lab2/tests/heat-sink.png" />
+  </g>
+</svg>
