@@ -27,6 +27,7 @@ struct cs {
 int encode_fast(struct chunk *chunk)
 {
     // TODO
+    // Check other spot weakness. Do better
     chunk->checksum = 42;
     return 0;
 }

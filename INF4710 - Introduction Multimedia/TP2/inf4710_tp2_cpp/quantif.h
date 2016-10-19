@@ -21,7 +21,17 @@ inline cv::Mat_<Tout> quantif(const cv::Mat_<Tin>& oBlock, int nQualityFactor=10
     const cv::Mat_<Tin>& oQuantifMat = s_mQuantMats.at(nClosestQualityFactor);
     cv::Mat_<Tout> oOutput(oBlock.size());
 
-    // @@@@ TODO (divide all elements in oBlock by those in oQuantifMat and return them rounded in oOutput)
+	int n = oBlock.rows;
+
+	for (int x = 0; x < n; ++x)
+	{
+		for (int y = 0; y < n; ++y)
+		{
+			float value = oBlock(x, y);
+			float quantifier = s_mQuantMats.at(nQualityFactor)(x, y);
+			oOutput(x, y) = (Tout) value / quantifier;
+		}
+	}
     
     return oOutput;
 }

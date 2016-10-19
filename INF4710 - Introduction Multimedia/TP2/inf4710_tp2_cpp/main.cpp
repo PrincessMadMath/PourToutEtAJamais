@@ -59,17 +59,40 @@ int main(int /*argc*/, char** /*argv*/) {
 			/* Test block - unblock*/
 			//const cv::Mat_<uchar> test = decoup_inv(vBlocks, Y.size());
 
-            for(size_t b=0; b<vBlocks.size(); ++b)
-                vDCTBlocks[b] = dct(vBlocks[b]);
+			for (size_t b = 0; b < vBlocks.size(); ++b)
+			{
+				vDCTBlocks[b] = dct(vBlocks[b]);
+
+				/* Test i_dct*/
+				/*
+				cv::Mat_<uchar> original = vBlocks[b];
+				cv::Mat_<float> dct = vDCTBlocks[b];
+				cv::Mat_<uchar> inverse = dct_inv(vDCTBlocks[b]);
+				*/
+				
+			}
+								
             std::vector<cv::Mat_<short>> vQuantifDCTBlocks(vDCTBlocks.size());
             for(size_t b=0; b<vDCTBlocks.size(); ++b)
                 vQuantifDCTBlocks[b] = quantif(vDCTBlocks[b],USE_QUANT_QUALITY);
+
             std::vector<std::array<short,8*8>> vInlinedBlocks(vQuantifDCTBlocks.size());
-            for(size_t b=0; b<vQuantifDCTBlocks.size(); ++b)
-                vInlinedBlocks[b] = zigzag(vQuantifDCTBlocks[b]);
+			for (size_t b = 0; b < vQuantifDCTBlocks.size(); ++b)
+			{
+				vInlinedBlocks[b] = zigzag(vQuantifDCTBlocks[b]);
+
+				// Test zigzag ...
+				/*
+				cv::Mat_<short> original = vQuantifDCTBlocks[b];
+				std::array<short, 8 * 8> arr = vInlinedBlocks[b];
+				cv::Mat_<short> inverse = zigzag_inv(vInlinedBlocks[b]);
+				*/
+			}
+                
             const HuffOutput<short> oCode = huff(vInlinedBlocks);
 
             // @@@@ TODO: check compression rate here...
+
 
             // DECOMPRESSION
             const std::vector<std::array<short,8*8>> vInlinedBlocks_decompr = huff_inv<8*8>(oCode);

@@ -15,59 +15,59 @@ struct HuffOutput {
     HuffMap<T> map;
 };
 
-class INode {
+class Inode {
 public:
     const int f;
-    virtual ~INode() {}
+    virtual ~Inode() {}
 protected:
-    INode(int f_init) : f(f_init) {}
+    Inode(int f_init) : f(f_init) {}
 };
 
-class InternalNode : public INode {
+class Internalnode : public Inode {
 public:
-    INode *const left;
-    INode *const right;
-    InternalNode(INode* c0, INode* c1) : INode(c0->f + c1->f), left(c0), right(c1) {}
-    ~InternalNode() {
+    Inode *const left;
+    Inode *const right;
+    Internalnode(Inode* c0, Inode* c1) : Inode(c0->f + c1->f), left(c0), right(c1) {}
+    ~Internalnode() {
         delete left;
         delete right;
     }
 };
 
 template<typename T>
-class LeafNode : public INode {
+class Leafnode : public Inode {
 public:
     const T c;
-    LeafNode(int f_init, T c_init) : INode(f_init), c(c_init) {}
+    Leafnode(int f_init, T c_init) : Inode(f_init), c(c_init) {}
 };
 
-struct NodeCmp {
-    bool operator()(const INode* lhs, const INode* rhs) const { return lhs->f > rhs->f; }
+struct nodeCmp {
+    bool operator()(const Inode* lhs, const Inode* rhs) const { return lhs->f > rhs->f; }
 };
 
-template<typename T,size_t NF>
-inline INode* BuildTree(const std::array<int,NF>& frequencies) {
-    std::priority_queue<INode*,std::vector<INode*>,NodeCmp> trees;
+template<typename T,size_t nF>
+inline Inode* BuildTree(const std::array<int,nF>& frequencies) {
+    std::priority_queue<Inode*,std::vector<Inode*>,nodeCmp> trees;
     for(size_t i=0; i<frequencies.size(); ++i) {
         if(frequencies[i]!=0)
-            trees.push(new LeafNode<T>(frequencies[i],(T)i));
+            trees.push(new Leafnode<T>(frequencies[i],(T)i));
     }
     while(trees.size() > 1) {
-        INode* childR = trees.top();
+        Inode* childR = trees.top();
         trees.pop();
-        INode* childL = trees.top();
+        Inode* childL = trees.top();
         trees.pop();
-        INode* parent = new InternalNode(childR, childL);
+        Inode* parent = new Internalnode(childR, childL);
         trees.push(parent);
     }
     return trees.top();
 }
 
 template<typename T>
-inline void GenerateCodes(const INode* node, const HuffCode& prefix, std::map<T,HuffCode>& outCodes) {
-    if(const LeafNode<T>* lf = dynamic_cast<const LeafNode<T>*>(node))
+inline void GenerateCodes(const Inode* node, const HuffCode& prefix, std::map<T,HuffCode>& outCodes) {
+    if(const Leafnode<T>* lf = dynamic_cast<const Leafnode<T>*>(node))
         outCodes[lf->c] = prefix;
-    else if(const InternalNode* in = dynamic_cast<const InternalNode*>(node)) {
+    else if(const Internalnode* in = dynamic_cast<const Internalnode*>(node)) {
         HuffCode leftPrefix = prefix;
         leftPrefix.push_back(false);
         GenerateCodes(in->left, leftPrefix, outCodes);
