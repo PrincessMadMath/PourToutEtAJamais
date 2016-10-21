@@ -14,7 +14,7 @@ inline int uv_2_index(int uv) {
 	return uv - 1;
 }
 
-inline float getC(int w, int n)
+inline double getC(int w, int n)
 {
 	if (w == 1)
 	{

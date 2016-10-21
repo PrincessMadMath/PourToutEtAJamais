@@ -11,19 +11,19 @@
 
 inline uchar getY(cv::Vec3b rbg_intensity)
 {
-	uchar Y = 0.299*rbg_intensity.val[red] + 0.587*rbg_intensity.val[green] + 0.114*rbg_intensity.val[blue];
+	uchar Y = cv::saturate_cast<uchar>(0.299*rbg_intensity.val[red] + 0.587*rbg_intensity.val[green] + 0.114*rbg_intensity.val[blue]);
 	return Y;
 }
 
 inline uchar getCb(cv::Vec3b rbg_intensity, uchar Y)
 {
-	uchar Cb = 128 + 0.564*(rbg_intensity.val[blue] - Y);
+	uchar Cb = cv::saturate_cast<uchar>(128 + 0.564*(rbg_intensity.val[blue] - Y));
 	return Cb;
 }
 
 inline uchar getCr(cv::Vec3b rbg_intensity, uchar Y)
 {
-	uchar Cr = 128 + 0.713*(rbg_intensity.val[red] - Y);
+	uchar Cr = cv::saturate_cast<uchar>(128 + 0.713*(rbg_intensity.val[red] - Y));
 	return Cr;
 }
 

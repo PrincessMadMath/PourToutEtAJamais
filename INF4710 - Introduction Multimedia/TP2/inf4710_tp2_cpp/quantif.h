@@ -29,7 +29,7 @@ inline cv::Mat_<Tout> quantif(const cv::Mat_<Tin>& oBlock, int nQualityFactor=10
 		{
 			float value = oBlock(x, y);
 			float quantifier = s_mQuantMats.at(nQualityFactor)(x, y);
-			oOutput(x, y) = (Tout) value / quantifier;
+			oOutput(x, y) = (Tout) (round(value / quantifier));
 		}
 	}
     

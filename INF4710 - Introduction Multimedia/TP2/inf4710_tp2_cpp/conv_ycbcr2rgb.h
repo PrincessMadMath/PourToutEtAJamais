@@ -4,17 +4,17 @@
 #include "tp2.h"
 
 inline uchar getR(uchar y, uchar cr) {
-	uchar r = y + 1.403*(cr - 128);
+	uchar r = cv::saturate_cast<uchar>(y + 1.403*(cr - 128));
 	return r;
 }
 
 inline uchar getG(uchar y, uchar cr, uchar cb) {
-	uchar g = y - 0.714*(cr - 128) - 0.344*(cb - 128);
+	uchar g = cv::saturate_cast<uchar>(y - 0.714*(cr - 128) - 0.344*(cb - 128));
 	return g;
 }
 
 inline uchar getB(uchar y, uchar cb) {
-	uchar b = y + 1.773*(cb - 128);
+	uchar b = cv::saturate_cast<uchar>(y + 1.773*(cb - 128));
 	return b;
 }
 

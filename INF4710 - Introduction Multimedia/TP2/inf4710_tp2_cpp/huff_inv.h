@@ -2,6 +2,7 @@
 #pragma once
 
 #include "huff_common.h"
+#include <algorithm>    // std::min
 
 template<size_t n=64, typename T=short>
 inline std::vector<std::array<T,n>> huff_inv(const HuffOutput<T>& oInput) {
@@ -10,8 +11,11 @@ inline std::vector<std::array<T,n>> huff_inv(const HuffOutput<T>& oInput) {
 
 	HuffReverseMap<T> reverseMap;
 
+	int minLength = INT32_MAX;
+
 	for (const auto& sm_pair : oInput.map)
 	{
+		minLength = (minLength< sm_pair.second.size()) ? minLength : sm_pair.second.size();
 		reverseMap.insert(std::pair<HuffCode, T>(sm_pair.second, sm_pair.first));
 	}
 
@@ -23,21 +27,26 @@ inline std::vector<std::array<T,n>> huff_inv(const HuffOutput<T>& oInput) {
 	for (int index = 0; index < oInput.string.size(); ++index)
 	{
 		temp.push_back(oInput.string[index]);
-		if (reverseMap.find(temp) != reverseMap.end())
+		
+		if (temp.size() >= minLength)
 		{
-			T value = reverseMap.at(temp);
-
-			block[elementCounter] = value;
-
-			++elementCounter;
-
-			if (elementCounter == n)
+			const auto& iterator = reverseMap.find(temp);
+			if (iterator != reverseMap.end())
 			{
-				vvOutput.push_back(block);
-				elementCounter = 0;
-			}
+				T value = reverseMap.at(temp);
 
-			temp.clear();
+				block[elementCounter] = value;
+
+				++elementCounter;
+
+				if (elementCounter == n)
+				{
+					vvOutput.push_back(block);
+					elementCounter = 0;
+				}
+
+				temp.clear();
+			}
 		}
 	}
    

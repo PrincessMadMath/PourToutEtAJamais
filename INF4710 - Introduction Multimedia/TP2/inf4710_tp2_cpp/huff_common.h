@@ -2,12 +2,13 @@
 #pragma once
 
 #include "tp2.h"
+#include <unordered_map>
 
 using HuffCode = std::vector<bool>;
 template<typename T>
 using HuffMap = std::map<T,HuffCode>;
 template<typename T>
-using HuffReverseMap = std::map<HuffCode,T>;
+using HuffReverseMap = std::unordered_map<HuffCode,T>;
 
 template<typename T>
 struct HuffOutput {

@@ -31,7 +31,8 @@ inline cv::Mat_<Tout> quantif_inv(const cv::Mat_<Tin>& oBlock, int nQualityFacto
 		{
 			float value = oBlock(x, y);
 			float quantifier = s_mQuantMats.at(nQualityFactor)(x, y);
-			oOutput(x, y) = (Tout)value * quantifier;
+			float temp = (value * quantifier);
+			oOutput(x, y) = (Tout) temp;
 		}
 	}
     
