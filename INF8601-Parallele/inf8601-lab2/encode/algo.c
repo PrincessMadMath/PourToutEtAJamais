@@ -26,9 +26,24 @@ struct cs {
 
 int encode_fast(struct chunk *chunk)
 {
-    // TODO
-    // Check other spot weakness. Do better
-    chunk->checksum = 42;
+	int i, j;
+	int index;
+	int checksum = 0;
+	int width = chunk->width;
+	int height = chunk->height;
+	char *data = chunk->data;
+	int key = chunk->key;
+	
+    #pragma omp parallel for private(i,j, index) reduction(+:checksum)
+    for (i = 0; i < height; i++) {
+		index = i * width;
+        for (j = 0; j < width; j++) {
+            data[index] += key;
+            checksum += data[index];
+            ++index;
+        }
+    }
+    chunk->checksum = checksum;
     return 0;
 }
 

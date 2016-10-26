@@ -1,0 +1,126 @@
+thread=1,func=fast,ht=0
+# started on Wed Oct 26 12:03:45 2016
+214344357,,cycles:u,60266925,100.00,,,,
+552019983,,instructions:u,60266925,100.00,2.58,insn per cycle
+160584047,,L1-dcache-loads:u,60266925,100.00,,,,
+32804,,L1-dcache-load-misses:u,60266925,100.00,0.02,of all L1-dcache hits
+thread=1,func=slow_a,ht=0
+# started on Wed Oct 26 12:03:45 2016
+2231499190,,cycles:u,569634347,100.00,,,,
+6592061693,,instructions:u,569634347,100.00,2.95,insn per cycle
+2665593599,,L1-dcache-loads:u,569634347,100.00,,,,
+7862963,,L1-dcache-load-misses:u,569634347,100.00,0.29,of all L1-dcache hits
+thread=1,func=slow_b,ht=0
+# started on Wed Oct 26 12:03:45 2016
+2820039241,,cycles:u,716141796,100.00,,,,
+6552083932,,instructions:u,716141796,100.00,2.32,insn per cycle
+2160579534,,L1-dcache-loads:u,716141796,100.00,,,,
+7864458,,L1-dcache-load-misses:u,716141796,100.00,0.36,of all L1-dcache hits
+thread=1,func=slow_c,ht=0
+# started on Wed Oct 26 12:03:46 2016
+12707049025,,cycles:u,3206661436,100.00,,,,
+5052064796,,instructions:u,3206661436,100.00,0.40,insn per cycle
+1660594910,,L1-dcache-loads:u,3206661436,100.00,,,,
+7868629,,L1-dcache-load-misses:u,3206661436,100.00,0.47,of all L1-dcache hits
+thread=1,func=slow_d,ht=0
+# started on Wed Oct 26 12:03:50 2016
+25792971108,,cycles:u,6541874346,100.00,,,,
+14552070771,,instructions:u,6541874346,100.00,0.56,insn per cycle
+6160598272,,L1-dcache-loads:u,6541874346,100.00,,,,
+7898442,,L1-dcache-load-misses:u,6541874346,100.00,0.13,of all L1-dcache hits
+thread=1,func=slow_e,ht=0
+# started on Wed Oct 26 12:03:56 2016
+5942954602,,cycles:u,2190350041,100.00,,,,
+5083451712,,instructions:u,2190350041,100.00,0.86,insn per cycle
+1910578311,,L1-dcache-loads:u,2190350041,100.00,,,,
+507904779,,L1-dcache-load-misses:u,2190350041,100.00,26.58,of all L1-dcache hits
+thread=1,func=slow_f,ht=0
+# started on Wed Oct 26 12:03:58 2016
+916223024,,cycles:u,240341009,100.00,,,,
+2145838008,,instructions:u,240341009,100.00,2.34,insn per cycle
+191849265,,L1-dcache-loads:u,240341009,100.00,,,,
+7858588,,L1-dcache-load-misses:u,240341009,100.00,4.10,of all L1-dcache hits
+thread=2,func=fast,ht=0
+# started on Wed Oct 26 12:03:59 2016
+514848156,,cycles:u,134945388,100.00,,,,
+572038873,,instructions:u,134945388,100.00,1.11,insn per cycle
+160588583,,L1-dcache-loads:u,134945388,100.00,,,,
+32186,,L1-dcache-load-misses:u,134945388,100.00,0.02,of all L1-dcache hits
+thread=2,func=slow_a,ht=0
+# started on Wed Oct 26 12:03:59 2016
+2545090139,,cycles:u,662075565,100.00,,,,
+6612082534,,instructions:u,662075565,100.00,2.60,insn per cycle
+2665602402,,L1-dcache-loads:u,662075565,100.00,,,,
+7866516,,L1-dcache-load-misses:u,662075565,100.00,0.30,of all L1-dcache hits
+thread=2,func=slow_b,ht=0
+# started on Wed Oct 26 12:03:59 2016
+16892380257,,cycles:u,4370256047,100.00,,,,
+6572113320,,instructions:u,4370256047,100.00,0.39,insn per cycle
+2160595921,,L1-dcache-loads:u,4370256047,100.00,,,,
+169116770,,L1-dcache-load-misses:u,4370256047,100.00,7.83,of all L1-dcache hits
+thread=2,func=slow_c,ht=0
+# started on Wed Oct 26 12:04:02 2016
+90670599975,,cycles:u,23409328331,100.00,,,,
+5072099984,,instructions:u,23409328331,100.00,0.06,insn per cycle
+1660607015,,L1-dcache-loads:u,23409328331,100.00,,,,
+554700063,,L1-dcache-load-misses:u,23409328331,100.00,33.40,of all L1-dcache hits
+thread=2,func=slow_d,ht=0
+# started on Wed Oct 26 12:04:14 2016
+125708994933,,cycles:u,74207924206,100.00,,,,
+19780522576,,instructions:u,74207924206,100.00,0.16,insn per cycle
+7262186353,,L1-dcache-loads:u,74207924206,100.00,,,,
+994317081,,L1-dcache-load-misses:u,74207924206,100.00,13.69,of all L1-dcache hits
+thread=2,func=slow_e,ht=0
+# started on Wed Oct 26 12:04:51 2016
+11097033328,,cycles:u,4109579539,100.00,,,,
+5103471036,,instructions:u,4109579539,100.00,0.46,insn per cycle
+1910573275,,L1-dcache-loads:u,4109579539,100.00,,,,
+658141082,,L1-dcache-load-misses:u,4109579539,100.00,34.45,of all L1-dcache hits
+thread=2,func=slow_f,ht=0
+# started on Wed Oct 26 12:04:53 2016
+1239639386,,cycles:u,333196485,100.00,,,,
+2165873134,,instructions:u,333196485,100.00,1.75,insn per cycle
+191859236,,L1-dcache-loads:u,333196485,100.00,,,,
+7870102,,L1-dcache-load-misses:u,333196485,100.00,4.10,of all L1-dcache hits
+thread=2,func=fast,ht=1
+# started on Wed Oct 26 12:04:54 2016
+514420334,,cycles:u,136012914,100.00,,,,
+572038934,,instructions:u,136012914,100.00,1.11,insn per cycle
+160588790,,L1-dcache-loads:u,136012914,100.00,,,,
+32115,,L1-dcache-load-misses:u,136012914,100.00,0.02,of all L1-dcache hits
+thread=2,func=slow_a,ht=1
+# started on Wed Oct 26 12:04:54 2016
+4463067996,,cycles:u,1131190992,100.00,,,,
+6612078200,,instructions:u,1131190992,100.00,1.48,insn per cycle
+2665601270,,L1-dcache-loads:u,1131190992,100.00,,,,
+7863639,,L1-dcache-load-misses:u,1131190992,100.00,0.30,of all L1-dcache hits
+thread=2,func=slow_b,ht=1
+# started on Wed Oct 26 12:04:55 2016
+12295108731,,cycles:u,3107397151,100.00,,,,
+6572118189,,instructions:u,3107397151,100.00,0.53,insn per cycle
+2160593108,,L1-dcache-loads:u,3107397151,100.00,,,,
+7941091,,L1-dcache-load-misses:u,3107397151,100.00,0.37,of all L1-dcache hits
+thread=2,func=slow_c,ht=1
+# started on Wed Oct 26 12:04:56 2016
+25716385698,,cycles:u,6485211055,100.00,,,,
+5072088792,,instructions:u,6485211055,100.00,0.20,insn per cycle
+1660603695,,L1-dcache-loads:u,6485211055,100.00,,,,
+7896361,,L1-dcache-load-misses:u,6485211055,100.00,0.48,of all L1-dcache hits
+thread=2,func=slow_d,ht=1
+# started on Wed Oct 26 12:05:00 2016
+52186992833,,cycles:u,48506898945,100.00,,,,
+18728431436,,instructions:u,48506898945,100.00,0.36,insn per cycle
+7022778576,,L1-dcache-loads:u,48506898945,100.00,,,,
+8981041,,L1-dcache-load-misses:u,48506898945,100.00,0.13,of all L1-dcache hits
+thread=2,func=slow_e,ht=1
+# started on Wed Oct 26 12:05:24 2016
+8735221208,,cycles:u,3186040815,100.00,,,,
+5103470223,,instructions:u,3186040815,100.00,0.58,insn per cycle
+1910586264,,L1-dcache-loads:u,3186040815,100.00,,,,
+391744957,,L1-dcache-load-misses:u,3186040815,100.00,20.50,of all L1-dcache hits
+thread=2,func=slow_f,ht=1
+# started on Wed Oct 26 12:05:26 2016
+1510507177,,cycles:u,395168084,100.00,,,,
+2165874662,,instructions:u,395168084,100.00,1.43,insn per cycle
+191859916,,L1-dcache-loads:u,395168084,100.00,,,,
+7866378,,L1-dcache-load-misses:u,395168084,100.00,4.10,of all L1-dcache hits
