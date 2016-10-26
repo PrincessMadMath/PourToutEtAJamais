@@ -24,13 +24,14 @@ int sinoscope_image_openmp(sinoscope_t *ptr)
     float val, px, py;
 
 	
-	#pragma omp parallel for
+	#pragma omp parallel for shared(sino) private(x, y, c, index, val, px, py, taylor)
 	for(x = 1; x < sino.width-1; ++x)
 	{
+		py = sino.dy * x - 2 * M_PI;
 		for(y = 1; y < sino.height; ++y)
-		{
+		{	
 			px = sino.dx * y - 2 * M_PI;
-            py = sino.dy * x - 2 * M_PI;
+            
             val = 0.0f;
             
             for (taylor = 1; taylor <= sino.taylor; taylor += 2) {
@@ -38,12 +39,17 @@ int sinoscope_image_openmp(sinoscope_t *ptr)
             }
             val = (atan(1.0 * val) - atan(-1.0 * val)) / (M_PI);
             val = (val + 1) * 100;
-            value_color(&c, val, sino.interval, sino.interval_inv);
-            index = (y * 3) + (x * 3) * sino.width;
-            sino.buf[index + 0] = c.r;
-            sino.buf[index + 1] = c.g;
-            sino.buf[index + 2] = c.b;
-            y++;
+            
+			#pragma omp critical 
+			{
+				value_color(&c, val, sino.interval, sino.interval_inv);
+			}
+			
+			index = (y * 3) + (x * 3) * sino.width;
+					
+			sino.buf[index + 0] = c.r;
+			sino.buf[index + 1] = c.g;
+			sino.buf[index + 2] = c.b;	
 		}
 	}
 	
