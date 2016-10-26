@@ -147,11 +147,9 @@ imwrite(img, 'house_grey_fft.png');
 % ceux en angles sont donc des carré avec une rotation (fenêtre en losange)
 
 % 3) 
-H = fspecial('gaussian', size(houseImageGray), 10);
+H = fspecial('gaussian', size(houseImageGray);
 imageFiltre = imfilter(houseImageGray, H, 'replicate');
-
-figure;
 imshow(imageFiltre);
-title('House Image Gaussian');
+
 
 
