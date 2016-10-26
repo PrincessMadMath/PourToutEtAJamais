@@ -131,9 +131,6 @@ title('House Image Gray Scale');
 
 img = TFDShift(houseImageGray, 'House Image Gray Scale TFD Shift');
 
-HouseImageGrayTDF = fftshift(houseImageGray);
-
-imwrite(img, 'house_grey_fft.png');
 % 2)
 
 % Les lignes Horizontales de la porte sont facile à déterminer comme les
@@ -147,9 +144,31 @@ imwrite(img, 'house_grey_fft.png');
 % ceux en angles sont donc des carré avec une rotation (fenêtre en losange)
 
 % 3) 
-H = fspecial('gaussian', size(houseImageGray);
-imageFiltre = imfilter(houseImageGray, H, 'replicate');
-imshow(imageFiltre);
+TFDShifted = fftshift(fft2(houseImageGray));
 
+H = fspecial('gaussian', size(TFDShifted), 13);
+fftFiltered = TFDShifted .* H / max(max(H));
 
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('House Image Gaussien');
 
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+figure;
+imshow(imgfiltre);
+title('House Image Gaussien');
+
+% 4)
+%minDelta = min(min(img));
+%maxDelta = max(max(img));
+%img = uint8(((img - minDelta)/(maxDelta - minDelta))*255);
+% imwrite(img, 'untitled.png');
+
+imageFilter = imread('untitled.png');
+imageFilter = rgb2gray(imageFilter);
+
+image = houseImageGray .* imageFilter / max(max(imageFilter));
+
+figure;
+imshow((log(1 + abs(image)), []);
+title('fenetres');

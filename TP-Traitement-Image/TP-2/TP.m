@@ -131,9 +131,6 @@ title('House Image Gray Scale');
 
 img = TFDShift(houseImageGray, 'House Image Gray Scale TFD Shift');
 
-HouseImageGrayTDF = fftshift(houseImageGray);
-
-imwrite(img, 'house_grey_fft.png');
 % 2)
 
 % Les lignes Horizontales de la porte sont facile à déterminer comme les
@@ -146,12 +143,77 @@ imwrite(img, 'house_grey_fft.png');
 % (fenêtre carré)
 % ceux en angles sont donc des carré avec une rotation (fenêtre en losange)
 
-% 3) 
-H = fspecial('gaussian', size(houseImageGray), 10);
-imageFiltre = imfilter(houseImageGray, H, 'replicate');
+front = imread('Frontieres.png');
+front = rgb2gray(front);
 
 figure;
-imshow(imageFiltre);
-title('House Image Gaussian');
+imshow(front);
+title('Frontières');
+
+% 3) 
+TFDShifted = fftshift(fft2(houseImageGray));
+
+H = fspecial('gaussian', size(TFDShifted), 13);
+fftFiltered = TFDShifted .* H / max(max(H));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('House Image Gaussien');
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+figure;
+imshow(imgfiltre);
+title('House Image Gaussien');
+
+% 4)
+%minDelta = min(min(img));
+%maxDelta = max(max(img));
+%img = uint8(((img - minDelta)/(maxDelta - minDelta))*255);
+%imwrite(img, 'original.png');
+
+imageFilter = imread('fenetreFiltre.png');
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('Filtre pour fenetre');
+
+figure;
+imshow(imgfiltre);
+title('Filtre avec fenetre');
 
 
+
+% 5) Texture de la porte
+
+imageFilter = imread('porteFiltre.png');
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('Filtre pour porte');
+
+figure;
+imshow(imgfiltre);
+title('Filtre avec porte');
+
+% 6) Si on ne conserve pas le componsant moyen, on perd completement la
+% couleur de fond (ici blanc) et tout deviens noir si aucune texture n'est
+% observé.
+
+% 7) Dans un filtre Butterworth, nous avons des coupures beaucoup moins
+% précise et la période de transition n'est pas idéale (certaines
+% fréquences augmenté).
+
+% 8) Un filtre passe haut. Lorsque la fréquence de coupure est haute, que
+% la porte ou la cheminé sont visibles. Plus celle-ci diminue vers les
+% basses fréquences, plus on se met à voir des éléments de plus en plus bas
+% en fréquences.
