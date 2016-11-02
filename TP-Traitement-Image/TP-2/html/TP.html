@@ -1,0 +1,497 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-10-26"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Partie 1 - Filtrage spatial</a></li><li><a href="#2">E1 Rehaussement d'image</a></li><li><a href="#3">Exercice 2</a></li><li><a href="#4">Partie 2 - Filtrage spectrale</a></li><li><a href="#5">Exercice 3</a></li><li><a href="#6">Exercice 4</a></li></ul></div><h2>Partie 1 - Filtrage spatial<a name="1"></a></h2><pre class="codeinput">currentfolder = pwd;
+</pre><h2>E1 Rehaussement d'image<a name="2"></a></h2><pre class="codeinput"><span class="comment">% 1)</span>
+img = imread(<span class="string">'img1.jpg'</span>);
+imgEgalized = Egalisation_Histogramme(img);
+figure;
+imshow(img);
+title(<span class="string">'Image Originale'</span>);
+
+figure;
+imshow(imgEgalized);
+title(<span class="string">'Histogramme &Eacute;galis&eacute;'</span>);
+
+<span class="comment">% 2)</span>
+gaussien = [1 2 1 2 1;2 4 8 4 2;1 8 18 8 1;2 4 8 4 2;1 2 1 2 1] * 1/90;
+imgFiltreGaussien = Filtre_Gaussien(imgEgalized, gaussien);
+
+figure;
+imshow(imgFiltreGaussien);
+title(<span class="string">'Filtr&eacute; Gaussien'</span>);
+
+<span class="comment">% 3)</span>
+delta = Filtre_Laplacien(imgFiltreGaussien);
+minDelta = min(min(delta));
+maxDelta = max(max(delta));
+
+visibleDelta = uint8(((delta - minDelta)/(maxDelta - minDelta))*255);
+
+figure;
+imshow(visibleDelta);
+title(<span class="string">'Filtre Laplacien'</span>);
+
+<span class="comment">% 4)</span>
+K = 1.2;
+gaussien = [1 2 3;2 4 2;1 2 1] * 1/16;
+imgFiltreGaussien = Filtre_Gaussien(imgEgalized, gaussien);
+contourRehausse = imgFiltreGaussien + K * delta;
+
+figure;
+imshow(contourRehausse);
+title(<span class="string">'contour Rehauss&eacute;'</span>);
+
+<span class="comment">% 5) Avec le Laplassion, on d&eacute;tecte les contours de l'image et avec le</span>
+<span class="comment">% rehaussement, on accentue ces zones en augmentant les contrastes.</span>
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <img vspace="5" hspace="5" src="TP_02.png" alt=""> <img vspace="5" hspace="5" src="TP_03.png" alt=""> <img vspace="5" hspace="5" src="TP_04.png" alt=""> <img vspace="5" hspace="5" src="TP_05.png" alt=""> <h2>Exercice 2<a name="3"></a></h2><pre class="codeinput"><span class="comment">% 1)</span>
+img = imread(<span class="string">'monnaie.png'</span>);
+figure;
+imshow(img);
+title(<span class="string">'Image Originale'</span>);
+
+<span class="comment">% 2)</span>
+seuil = 250;
+binarized = Binariser(img, 250);
+inverse = imcomplement(binarized);
+figure;
+imshow(inverse);
+title(<span class="string">'Image BInariser Complementaire'</span>);
+
+<span class="comment">% 3) ouverture -&gt; fermeture</span>
+
+imageOuverte = imopen(inverse, strel(<span class="string">'disk'</span>, 1));
+imageFerme = imclose(imageOuverte, strel(<span class="string">'disk'</span>, 3));
+
+figure;
+imshow(imageFerme);
+title(<span class="string">'Image BInariser Complementaire'</span>);
+
+<span class="comment">% 4)</span>
+valeur = CompterMonnaie(imageFerme);
+</pre><img vspace="5" hspace="5" src="TP_06.png" alt=""> <img vspace="5" hspace="5" src="TP_07.png" alt=""> <img vspace="5" hspace="5" src="TP_08.png" alt=""> <h2>Partie 2 - Filtrage spectrale<a name="4"></a></h2><h2>Exercice 3<a name="5"></a></h2><pre class="codeinput"><span class="comment">% 1)</span>
+
+barresVerticales = imread(<span class="string">'Barres_Verticales.png'</span>);
+barresObliques = imread(<span class="string">'Barres_Obliques.png'</span>);
+barresHorizontales = imread(<span class="string">'Barres_Horizontales.png'</span>);
+
+figure;
+imshow(barresVerticales);
+title(<span class="string">'Barres Verticales'</span>);
+
+figure;
+imshow(barresObliques);
+title(<span class="string">'Barres Obliques'</span>);
+
+figure;
+imshow(barresHorizontales);
+title(<span class="string">'Barres Horizontales'</span>);
+
+<span class="comment">% 2) Calcul tfd</span>
+
+TFDShift(barresVerticales, <span class="string">'TFD Barres Verticales'</span>);
+
+TFDShift(barresObliques, <span class="string">'TFD Barres Obliques'</span>);
+
+TFDShift(barresHorizontales, <span class="string">'TFD Barres Horizontales'</span>);
+
+<span class="comment">% 3)</span>
+
+barresVerticalesRotated = imrotate(barresVerticales, 70, <span class="string">'bilinear'</span>,<span class="string">'crop'</span>);
+
+figure;
+imshow(barresVerticalesRotated);
+title(<span class="string">'Barres Verticales tourne'</span>);
+
+TFDShift(barresVerticalesRotated, <span class="string">'TFD Barres Verticales tourne'</span>);
+
+<span class="comment">% 4) On peut observer une rotation identique dans le plan des fr&eacute;quences.</span>
+<span class="comment">% On remarque aussi un effet de croit, comme observ&eacute; dans la TDF de l'image</span>
+<span class="comment">% des barres Obliques.</span>
+</pre><img vspace="5" hspace="5" src="TP_09.png" alt=""> <img vspace="5" hspace="5" src="TP_10.png" alt=""> <img vspace="5" hspace="5" src="TP_11.png" alt=""> <img vspace="5" hspace="5" src="TP_12.png" alt=""> <img vspace="5" hspace="5" src="TP_13.png" alt=""> <img vspace="5" hspace="5" src="TP_14.png" alt=""> <img vspace="5" hspace="5" src="TP_15.png" alt=""> <img vspace="5" hspace="5" src="TP_16.png" alt=""> <h2>Exercice 4<a name="6"></a></h2><pre class="codeinput"><span class="comment">% 1)</span>
+houseImage = imread(<span class="string">'NewHouse.png'</span>);
+houseImageGray = rgb2gray(houseImage);
+
+figure;
+imshow(houseImageGray);
+title(<span class="string">'House Image Gray Scale'</span>);
+
+img = TFDShift(houseImageGray, <span class="string">'House Image Gray Scale TFD Shift'</span>);
+
+<span class="comment">% 2)</span>
+
+<span class="comment">% Les lignes Horizontales de la porte sont facile &agrave; d&eacute;terminer comme les</span>
+<span class="comment">% lignes verticales de la FFT. (centrale et les autres r&eacute;curentes)</span>
+
+<span class="comment">% De m&ecirc;me, les lignes Verticaux des murs sont facile &agrave; d&eacute;terminer comme</span>
+<span class="comment">% les lignes horizontales de la FFT.</span>
+
+<span class="comment">% Les formes de carr&eacute; se repr&eacute;sente sur la FFT comme des &eacute;toiles ( + ).</span>
+<span class="comment">% (fen&ecirc;tre carr&eacute;)</span>
+<span class="comment">% ceux en angles sont donc des carr&eacute; avec une rotation (fen&ecirc;tre en losange)</span>
+
+front = imread(<span class="string">'Frontieres.png'</span>);
+front = rgb2gray(front);
+
+figure;
+imshow(front);
+title(<span class="string">'Fronti&egrave;res'</span>);
+
+<span class="comment">% 3)</span>
+TFDShifted = fftshift(fft2(houseImageGray));
+
+H = fspecial(<span class="string">'gaussian'</span>, size(TFDShifted), 13);
+fftFiltered = TFDShifted .* H / max(max(H));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title(<span class="string">'House Image Gaussien'</span>);
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+figure;
+imshow(imgfiltre);
+title(<span class="string">'House Image Gaussien'</span>);
+
+<span class="comment">% 4)</span>
+<span class="comment">%minDelta = min(min(img));</span>
+<span class="comment">%maxDelta = max(max(img));</span>
+<span class="comment">%img = uint8(((img - minDelta)/(maxDelta - minDelta))*255);</span>
+<span class="comment">%imwrite(img, 'original.png');</span>
+
+imageFilter = imread(<span class="string">'fenetreFiltre.png'</span>);
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title(<span class="string">'Filtre pour fenetre'</span>);
+
+figure;
+imshow(imgfiltre);
+title(<span class="string">'Filtre avec fenetre'</span>);
+
+
+
+<span class="comment">% 5) Texture de la porte</span>
+
+imageFilter = imread(<span class="string">'porteFiltre.png'</span>);
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title(<span class="string">'Filtre pour porte'</span>);
+
+figure;
+imshow(imgfiltre);
+title(<span class="string">'Filtre avec porte'</span>);
+
+<span class="comment">% 6) Si on ne conserve pas le componsant moyen, on perd completement la</span>
+<span class="comment">% couleur de fond (ici blanc) et tout deviens noir si aucune texture n'est</span>
+<span class="comment">% observ&eacute;.</span>
+
+<span class="comment">% 7) Dans un filtre Butterworth, nous avons des coupures beaucoup moins</span>
+<span class="comment">% pr&eacute;cise et la p&eacute;riode de transition n'est pas id&eacute;ale (certaines</span>
+<span class="comment">% fr&eacute;quences augment&eacute;).</span>
+
+<span class="comment">% 8) Un filtre passe haut. Lorsque la fr&eacute;quence de coupure est haute, que</span>
+<span class="comment">% la porte ou la chemin&eacute; sont visibles. Plus celle-ci diminue vers les</span>
+<span class="comment">% basses fr&eacute;quences, plus on se met &agrave; voir des &eacute;l&eacute;ments de plus en plus bas</span>
+<span class="comment">% en fr&eacute;quences.</span>
+</pre><pre class="codeoutput">Warning: Displaying real part of complex input. 
+Warning: Displaying real part of complex input. 
+Warning: Displaying real part of complex input. 
+</pre><img vspace="5" hspace="5" src="TP_17.png" alt=""> <img vspace="5" hspace="5" src="TP_18.png" alt=""> <img vspace="5" hspace="5" src="TP_19.png" alt=""> <img vspace="5" hspace="5" src="TP_20.png" alt=""> <img vspace="5" hspace="5" src="TP_21.png" alt=""> <img vspace="5" hspace="5" src="TP_22.png" alt=""> <img vspace="5" hspace="5" src="TP_23.png" alt=""> <img vspace="5" hspace="5" src="TP_24.png" alt=""> <img vspace="5" hspace="5" src="TP_25.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Partie 1 - Filtrage spatial
+currentfolder = pwd;
+
+%% E1 Rehaussement d'image
+
+% 1)
+img = imread('img1.jpg');
+imgEgalized = Egalisation_Histogramme(img);
+figure;
+imshow(img);
+title('Image Originale');
+
+figure;
+imshow(imgEgalized);
+title('Histogramme Égalisé');
+
+% 2)
+gaussien = [1 2 1 2 1;2 4 8 4 2;1 8 18 8 1;2 4 8 4 2;1 2 1 2 1] * 1/90;
+imgFiltreGaussien = Filtre_Gaussien(imgEgalized, gaussien);
+
+figure;
+imshow(imgFiltreGaussien);
+title('Filtré Gaussien');
+
+% 3)
+delta = Filtre_Laplacien(imgFiltreGaussien);
+minDelta = min(min(delta));
+maxDelta = max(max(delta));
+
+visibleDelta = uint8(((delta - minDelta)/(maxDelta - minDelta))*255);
+
+figure;
+imshow(visibleDelta);
+title('Filtre Laplacien');
+
+% 4)
+K = 1.2;
+gaussien = [1 2 3;2 4 2;1 2 1] * 1/16;
+imgFiltreGaussien = Filtre_Gaussien(imgEgalized, gaussien);
+contourRehausse = imgFiltreGaussien + K * delta;
+
+figure;
+imshow(contourRehausse);
+title('contour Rehaussé');
+
+% 5) Avec le Laplassion, on détecte les contours de l'image et avec le
+% rehaussement, on accentue ces zones en augmentant les contrastes.
+
+%% Exercice 2
+
+% 1) 
+img = imread('monnaie.png');
+figure;
+imshow(img);
+title('Image Originale');
+
+% 2)
+seuil = 250;
+binarized = Binariser(img, 250);
+inverse = imcomplement(binarized);
+figure;
+imshow(inverse);
+title('Image BInariser Complementaire');
+
+% 3) ouverture -> fermeture
+
+imageOuverte = imopen(inverse, strel('disk', 1));
+imageFerme = imclose(imageOuverte, strel('disk', 3));
+
+figure;
+imshow(imageFerme);
+title('Image BInariser Complementaire');
+
+% 4)
+valeur = CompterMonnaie(imageFerme);
+
+
+%% Partie 2 - Filtrage spectrale
+
+%% Exercice 3
+
+% 1)
+
+barresVerticales = imread('Barres_Verticales.png');
+barresObliques = imread('Barres_Obliques.png');
+barresHorizontales = imread('Barres_Horizontales.png');
+
+figure;
+imshow(barresVerticales);
+title('Barres Verticales');
+
+figure;
+imshow(barresObliques);
+title('Barres Obliques');
+
+figure;
+imshow(barresHorizontales);
+title('Barres Horizontales');
+
+% 2) Calcul tfd
+
+TFDShift(barresVerticales, 'TFD Barres Verticales');
+
+TFDShift(barresObliques, 'TFD Barres Obliques');
+
+TFDShift(barresHorizontales, 'TFD Barres Horizontales');
+
+% 3) 
+
+barresVerticalesRotated = imrotate(barresVerticales, 70, 'bilinear','crop');
+
+figure;
+imshow(barresVerticalesRotated);
+title('Barres Verticales tourne');
+
+TFDShift(barresVerticalesRotated, 'TFD Barres Verticales tourne');
+
+% 4) On peut observer une rotation identique dans le plan des fréquences.
+% On remarque aussi un effet de croit, comme observé dans la TDF de l'image
+% des barres Obliques.
+
+%% Exercice 4
+
+% 1)
+houseImage = imread('NewHouse.png');
+houseImageGray = rgb2gray(houseImage);
+
+figure;
+imshow(houseImageGray);
+title('House Image Gray Scale');
+
+img = TFDShift(houseImageGray, 'House Image Gray Scale TFD Shift');
+
+% 2)
+
+% Les lignes Horizontales de la porte sont facile à déterminer comme les
+% lignes verticales de la FFT. (centrale et les autres récurentes)
+
+% De même, les lignes Verticaux des murs sont facile à déterminer comme
+% les lignes horizontales de la FFT.
+
+% Les formes de carré se représente sur la FFT comme des étoiles ( + ).
+% (fenêtre carré)
+% ceux en angles sont donc des carré avec une rotation (fenêtre en losange)
+
+front = imread('Frontieres.png');
+front = rgb2gray(front);
+
+figure;
+imshow(front);
+title('Frontières');
+
+% 3) 
+TFDShifted = fftshift(fft2(houseImageGray));
+
+H = fspecial('gaussian', size(TFDShifted), 13);
+fftFiltered = TFDShifted .* H / max(max(H));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('House Image Gaussien');
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+figure;
+imshow(imgfiltre);
+title('House Image Gaussien');
+
+% 4)
+%minDelta = min(min(img));
+%maxDelta = max(max(img));
+%img = uint8(((img - minDelta)/(maxDelta - minDelta))*255);
+%imwrite(img, 'original.png');
+
+imageFilter = imread('fenetreFiltre.png');
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('Filtre pour fenetre');
+
+figure;
+imshow(imgfiltre);
+title('Filtre avec fenetre');
+
+
+
+% 5) Texture de la porte
+
+imageFilter = imread('porteFiltre.png');
+imageFilter = rgb2gray(imageFilter);
+
+fftFiltered = TFDShifted .* double(imageFilter / max(max(imageFilter)));
+
+imgfiltre = uint8(ifft2(ifftshift(fftFiltered)));
+
+figure;
+imshow(log(1 + abs(fftFiltered)), []);
+title('Filtre pour porte');
+
+figure;
+imshow(imgfiltre);
+title('Filtre avec porte');
+
+% 6) Si on ne conserve pas le componsant moyen, on perd completement la
+% couleur de fond (ici blanc) et tout deviens noir si aucune texture n'est
+% observé.
+
+% 7) Dans un filtre Butterworth, nous avons des coupures beaucoup moins
+% précise et la période de transition n'est pas idéale (certaines
+% fréquences augmenté).
+
+% 8) Un filtre passe haut. Lorsque la fréquence de coupure est haute, que
+% la porte ou la cheminé sont visibles. Plus celle-ci diminue vers les
+% basses fréquences, plus on se met à voir des éléments de plus en plus bas
+% en fréquences.
+##### SOURCE END #####
+--></body></html>
