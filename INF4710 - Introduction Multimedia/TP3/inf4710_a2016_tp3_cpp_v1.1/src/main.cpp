@@ -36,6 +36,18 @@ inline void testHistogramme(cv::Mat src, int N)
 	cv::waitKey(1);
 }
 
+inline void testConvolution(cv::Mat src)
+{
+	float filterData[9] = { -10, 0, 10,
+						   -10, 0, 10,
+						   -10, 0, 10 };
+	cv::Mat_<float> kernel = cv::Mat(3, 3, CV_32F, filterData);
+	
+	cv::Mat convolutionResult = tp3::convo(src, kernel);
+
+	cv::waitKey(1);
+}
+
 
 int main(int /*argc*/, char** /*argv*/) {
     try {
@@ -47,7 +59,8 @@ int main(int /*argc*/, char** /*argv*/) {
             cv::imshow("oImg",oImg);
             cv::waitKey(1);
 
-			testHistogramme(oImg, 4);
+			//testHistogramme(oImg, 4);
+			testConvolution(oImg);
 
 			std::cout << "Frame!" << "\n";
         }
