@@ -40,7 +40,7 @@ int sinoscope_image_openmp(sinoscope_t *ptr)
             val = (atan(1.0 * val) - atan(-1.0 * val)) / (M_PI);
             val = (val + 1) * 100;
             
-			#pragma omp critical 
+			//#pragma omp critical 
 			{
 				value_color(&c, val, sino.interval, sino.interval_inv);
 			}

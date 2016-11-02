@@ -32,7 +32,6 @@ static cl_program prog = NULL;
 static cl_kernel kernel = NULL;
 
 static cl_mem output = NULL;
-static cl_mem sino = NULL;
 
 int get_opencl_queue()
 {
@@ -133,19 +132,14 @@ error:
 
 int create_buffer(int width, int height)
 {
-    cl_int ret;
+    cl_int ret = 0;
 	cl_int errorCode;
 	
 	// Initialise mémoire requise pour matrices de l'image
 	int requiredSize = width * height * sizeof(char) * COLOR_COUNT;
 	output = clCreateBuffer(context, CL_MEM_WRITE_ONLY,requiredSize, NULL, &errorCode); 
 	ERR_THROW(CL_SUCCESS,ret,"Error with 'CreateBuffer' for output");
-
-	// Initialise mémoire requise pour le sinoscope
-	sino = clCreateBuffer(context,CL_MEM_READ_ONLY ,sizeof(sinoscope_t), NULL, &errorCode);
-	ERR_THROW(CL_SUCCESS,ret,"Error with 'CreateBuffer' for sino");
 	
-    ret = 0;
     
 done:
     return ret;
@@ -190,42 +184,44 @@ void opencl_shutdown()
 {
     if (queue) 	clReleaseCommandQueue(queue);
     if (context)	clReleaseContext(context);
-
-    if(prog) clReleaseProgram(prog);
-    if(kernel) clReleaseKernel(kernel);
-    if(output) clReleaseMemObject(output);
+    if (prog) clReleaseProgram(prog);
+    if (kernel) clReleaseKernel(kernel);
+    if (output) clReleaseMemObject(output);
 }
 
 int sinoscope_image_opencl(sinoscope_t *ptr)
-{
+{ 
+	
+	
 	cl_int ret = 0;
     cl_event ev;
     
-	int requiredSize;
+	int requiredSize = ptr->width * ptr->height * sizeof(char) * COLOR_COUNT;
 	size_t work_dimension[2] =  {(size_t) ptr->width, (size_t) ptr->height};;
 	
     if (ptr == NULL)
         goto error;
 	
 
-    
-     //   1. Passer les arguments au noyau avec clSetKernelArg(). Si des
-     //     arguments sont passees par un tampon, copier les valeurs avec
-     //     clEnqueueWriteBuffer() de maniere synchrone.
-    
+    // 1. Set les arguments et copie object dans tampon
+        
     // Arg0 = output
     ret = clSetKernelArg(kernel,0,sizeof(cl_mem),&output);
-	ERR_THROW(CL_SUCCESS,ret,"Error with 'clSetKernelArg'");
+	ERR_THROW(CL_SUCCESS,ret,"Error with 'clSetKernelArg' for output");
 	
-	// Arg1 = sino
-	ret = clSetKernelArg(kernel,1,sizeof(cl_mem),&sino);
-	ERR_THROW(CL_SUCCESS,ret,"Set kernel argument ptr failed");
+	// Set other Args
+	ret = clSetKernelArg(kernel, 1, sizeof(int), &(ptr->width));
+	ret |= clSetKernelArg(kernel, 2, sizeof(int), &(ptr->interval));
+	ret |= clSetKernelArg(kernel, 3, sizeof(int), &(ptr->taylor));
+	ret |= clSetKernelArg(kernel, 4, sizeof(float), &(ptr->interval_inv));
+	ret |= clSetKernelArg(kernel, 5, sizeof(float), &(ptr->time));
+	ret |= clSetKernelArg(kernel, 6, sizeof(float), &(ptr->phase0));
+	ret |= clSetKernelArg(kernel, 7, sizeof(float), &(ptr->phase1));
+	ret |= clSetKernelArg(kernel, 8, sizeof(float), &(ptr->dx));
+	ret |= clSetKernelArg(kernel, 9, sizeof(float), &(ptr->dy));
+    ERR_THROW(CL_SUCCESS,ret,"Error with 'clSetKernelArg' for sinoscope argument");
      
-    // Copie de l'object sinoscope (de l'hote) au GPU
-    ret = clEnqueueWriteBuffer(queue,sino,CL_TRUE,0,sizeof(sinoscope_t),ptr,0,NULL,NULL);
-    ERR_THROW(CL_SUCCESS,ret,"Error with 'EnqueueWriteBuffer'");
-
-        
+     
     // 2. Enqueu range	
 	ret = clEnqueueNDRangeKernel(queue, kernel, 2, 0, work_dimension, NULL, 0, NULL, NULL);
 	ERR_THROW(CL_SUCCESS,ret,"Error with 'EnqueueNDRangeKernel'");
@@ -235,9 +231,11 @@ int sinoscope_image_opencl(sinoscope_t *ptr)
 	ERR_THROW(CL_SUCCESS,ret,"Error with 'Finish'");	
 	
 	// 4. Lire les résultat : copie dans output
-	requiredSize = ptr->width * ptr->height * sizeof(char) * COLOR_COUNT;
 	ret = clEnqueueReadBuffer(queue,output,CL_TRUE,0,requiredSize,ptr->buf,0,NULL,NULL);
 	ERR_THROW(CL_SUCCESS,ret,"Error with 'EnqueueReadBuffer'");	
+	
+
+    
 
 done:
     return ret;
