@@ -1,4 +1,4 @@
-package utils;
+package worker;
 /**
  * Methodes utilitaires pour effectuer les operations du TP2.
  * 

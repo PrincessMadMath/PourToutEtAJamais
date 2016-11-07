@@ -1,6 +1,10 @@
 package contract;
 
-public class Operation {
-	OperationType type;
-	int operand;
+public class Operation implements java.io.Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	public OperationType type;
+	public int operand;
 }

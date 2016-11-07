@@ -7,15 +7,15 @@ ant
 2. Lancer rmi registre
 
 cd bin
-rmiregistry&
+rmiregistry& [nb port: hard coded 5000]
 
-3. Lancer server (à partir dossier principal)
+3. Lancer worker (à partir dossier principal)
 
-./serveur
+./worker [config to use (check in worker/ConfigLoader.java)]
 
 4. Utiliser client*
 
-./client (dummy ip address) [command] [args]
+./client 
 
 ex: ./client 0 list
 

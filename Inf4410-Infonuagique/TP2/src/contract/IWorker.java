@@ -6,4 +6,5 @@ import java.rmi.RemoteException;
 public interface IWorker extends Remote{
 	
 	JobResponse Execute(Job job) throws RemoteException;
+	String SayHelloWorld() throws RemoteException;
 }

@@ -19,7 +19,7 @@ public class WorkerLoader {
 		IWorker stub = null;
 
 		try {
-			Registry registry = LocateRegistry.getRegistry("127.0.0.1");
+			Registry registry = LocateRegistry.getRegistry();
 			stub = (IWorker) registry.lookup("server");
 		} catch (NotBoundException e) {
 			System.out.println("Erreur: Le nom '" + e.getMessage()
@@ -42,7 +42,7 @@ public class WorkerLoader {
 		IWorker stub = null;
 
 		try {
-			Registry registry = LocateRegistry.getRegistry(hostname);
+			Registry registry = LocateRegistry.getRegistry(hostname, 5000);
 			stub = (IWorker) registry.lookup("server");
 		} catch (NotBoundException e) {
 			System.out.println("Erreur: Le nom '" + e.getMessage()

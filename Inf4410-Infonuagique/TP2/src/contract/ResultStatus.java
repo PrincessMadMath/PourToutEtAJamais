@@ -1,6 +1,6 @@
 package contract;
 
-public enum ResultStatus {
+public enum ResultStatus implements java.io.Serializable{
 	Success,
 	Deny
 }
