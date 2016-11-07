@@ -15,7 +15,7 @@ rmiregistry& [nb port: hard coded 5000]
 
 4. Utiliser client*
 
-./client 
+./client [operation path] ["1" to trust worker]
 
 ex: ./client 0 list
 

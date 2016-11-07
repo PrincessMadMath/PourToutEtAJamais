@@ -89,6 +89,8 @@ public class Worker implements IWorker {
 	public JobResponse Execute(Job job) throws RemoteException {
 		JobResponse response = new JobResponse();
 		
+		System.out.println("Receive " + job.Operations.size() + " operations");
+		
 		if(!doesTakeJob(job.Operations.size())){
 			response.Status = ResultStatus.Deny;
 			response.Details = "Deny, because to much work and I am lazy!"; 

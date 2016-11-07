@@ -3,6 +3,7 @@ package repartitor;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -12,9 +13,9 @@ import contract.OperationType;
 
 public class JobLoader {
 
-	public static Job getJob(String path) throws IOException
+	public static List<Operation> getJob(String path) throws IOException
 	{
-		Job job = new Job();
+		List<Operation>  operations = new ArrayList<Operation>();
 		try(BufferedReader br = new BufferedReader(new FileReader(path))){
 			String line;
 			while((line = br.readLine()) != null)
@@ -39,10 +40,10 @@ public class JobLoader {
 				
 				operation.operand = Integer.parseInt(split.get(1));
 				
-				job.Operations.add(operation);
+				operations.add(operation);
 			}
 		}
 		
-		return job;
+		return operations;
 	}
 }
