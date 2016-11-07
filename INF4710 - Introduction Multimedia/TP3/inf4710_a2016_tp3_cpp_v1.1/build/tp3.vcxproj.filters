@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\src\convo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\src\histo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\include\utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{E38D2673-73B2-3434-8717-A010C70F647A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{84B2A2FA-B484-38C1-B028-0D545C7DE623}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\data\TP3_video.avi" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,488 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>PHS4700 : Physique Multim&eacute;dia - Devoir 1</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-09-23"><meta name="DC.source" content="Main.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>PHS4700 : Physique Multim&eacute;dia - Devoir 1</h1><!--introduction--><p>Cr&eacute;&eacute; : 17 sept. 2015</p><p>Auteurs :</p><div><ul><li>Alex Gagn&eacute; (1689761)</li><li>F&eacute;lix La Rocque Cartier (1621348)</li><li>Mathieux Gamache (1626377)</li><li>Konstantin Fedorov (1679095)</li></ul></div><p>Ce travail &agrave; pour but de nous familiariser avec les matrices de rotation, du calcul des centres de masses, moments d'inerties et acc&eacute;l&eacute;rations angulaires dans une application multim&eacute;dia</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">D&eacute;claration des variables</a></li><li><a href="#2">Creation de nos parties du corps et calcul de la masse</a></li><li><a href="#3">Cas 1 : patineur droit, bras vertical</a></li><li><a href="#4">Cas 2 Patineur droit, bras &eacute;tendu</a></li><li><a href="#5">Cas 3 : Patineur incline, bras le long du corps</a></li><li><a href="#6">cas 4 : Patineur incline, bras etendu</a></li><li><a href="#7">Affichage des resultats</a></li></ul></div><h2>D&eacute;claration des variables<a name="1"></a></h2><pre class="codeinput"><span class="comment">% Longueurs</span>
+longJamb  = 0.75;
+longTronc = 0.70;
+longCou   = 0.10;
+longBras  = 0.75;
+
+<span class="comment">% Rayons</span>
+rayonTete  = 0.10;
+rayonJamb  = 0.06;
+rayonCou   = 0.04;
+rayonBras  = 0.03;
+rayonTronc = 0.15;
+
+<span class="comment">% Densit&eacute;s</span>
+densiteTete  = 1056;
+densiteJamb  = 1052;
+densiteTronc = 953;
+densiteCou   = 953;
+densiteBras  = 1052;
+
+<span class="comment">% Autres</span>
+pointForce      = [0;0;longJamb+longTronc+longCou+rayonTete];
+vitessePatineur = [0;0;10];
+</pre><h2>Creation de nos parties du corps et calcul de la masse<a name="2"></a></h2><p>Classes utilis&eacute;es : <a href="Sphere.html">Sphere</a>, <a href="Cylinder.html">Cylinder</a> qui h&eacute;ritent de <a href="Shape.html">Shape</a></p><p>Fonction utilis&eacute;es : <a href="moveMoment.html">moveMoment</a></p><pre class="codeinput">rightLeg = Cylinder( [-0.10;0;longJamb/2], densiteJamb, rayonJamb, longJamb, 3 );
+leftLeg  = Cylinder( [0.10;0;longJamb/2], densiteJamb, rayonJamb, longJamb, 3 );
+tronc    = Cylinder( [0;0;longJamb + longTronc/2], densiteTronc, rayonTronc, longTronc, 3 );
+leftArm  = Cylinder( [-rayonTronc-rayonBras;0;longJamb+longTronc-longBras/2], densiteBras, rayonBras, longBras, 3 );
+rightArm = Cylinder( [rayonTronc+rayonBras;0;longJamb+longTronc-longBras/2], densiteBras, rayonBras, longBras, 3 );
+leftArm2 = Cylinder( [-rayonTronc-longBras/2;0;longJamb+longTronc-rayonBras], densiteBras, rayonBras, longBras, 1 );
+neck     = Cylinder( [0;0;longJamb + longTronc + longCou/2], densiteCou, rayonCou, longCou, 3 );
+head     =   Sphere( [0;0;longJamb+longTronc+longCou + rayonTete], densiteTete, rayonTete );
+
+<span class="comment">%La masse des parties du corps individuelles sont calcul&eacute;es &agrave; leur cr&eacute;ation</span>
+totalMass = rightLeg.weight <span class="keyword">...</span>
+    + leftLeg.weight <span class="keyword">...</span>
+    + tronc.weight <span class="keyword">...</span>
+    + rightArm.weight <span class="keyword">...</span>
+    + leftArm.weight <span class="keyword">...</span>
+    + neck.weight <span class="keyword">...</span>
+    + head.weight;
+</pre><h2>Cas 1 : patineur droit, bras vertical<a name="3"></a></h2><pre class="codeinput">centerOfMass = (rightLeg.centerOfMass * rightLeg.weight <span class="keyword">...</span>
+    + leftLeg.centerOfMass * leftLeg.weight <span class="keyword">...</span>
+    + tronc.centerOfMass * tronc.weight <span class="keyword">...</span>
+    + rightArm.centerOfMass * rightArm.weight <span class="keyword">...</span>
+    + leftArm.centerOfMass * leftArm.weight <span class="keyword">...</span>
+    + neck.centerOfMass * neck.weight <span class="keyword">...</span>
+    + head.centerOfMass * head.weight)<span class="keyword">...</span>
+    / totalMass;
+
+
+momentInertie = moveMoment(centerOfMass,leftLeg) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,rightLeg) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,tronc) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,rightArm) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,leftArm) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,neck) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,head);
+
+momentForce     = cross(pointForce - centerOfMass, [0;-200;0]);
+accAngulaire    = momentInertie\momentForce; <span class="comment">% equivalent a inv(momentGlobal) * momentForce</span>
+momentCinetique = momentInertie*vitessePatineur;
+accAngulaire2   = momentInertie\(momentForce + cross(momentCinetique,vitessePatineur));
+</pre><h2>Cas 2 Patineur droit, bras &eacute;tendu<a name="4"></a></h2><p>Les calculs sont les m&ecirc;mes que pour le premier cas, &agrave; la diff&eacute;rence que le bras gauche est maintenant &eacute;tendu</p><pre class="codeinput">centerOfMass_2 = (rightLeg.centerOfMass * rightLeg.weight <span class="keyword">...</span>
+    + leftLeg.centerOfMass * leftLeg.weight <span class="keyword">...</span>
+    + tronc.centerOfMass * tronc.weight <span class="keyword">...</span>
+    + rightArm.centerOfMass * rightArm.weight <span class="keyword">...</span>
+    + leftArm2.centerOfMass * leftArm.weight <span class="keyword">...</span>
+    + neck.centerOfMass * neck.weight <span class="keyword">...</span>
+    + head.centerOfMass * head.weight)<span class="keyword">...</span>
+    / totalMass;
+momentInertie_2 = moveMoment(centerOfMass,leftLeg) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,rightLeg) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,tronc) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,rightArm) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,leftArm2) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,neck) <span class="keyword">...</span>
+    + moveMoment(centerOfMass,head);
+
+
+momentForce_2     = cross(pointForce - centerOfMass_2,[0;-200;0]);
+accAngulaire_2    = momentInertie_2\momentForce_2;
+momentCinetique_2 = momentInertie_2 * vitessePatineur;
+accAngulaire2_2   = momentInertie_2\(momentForce_2 + cross(momentCinetique_2,vitessePatineur));
+</pre><h2>Cas 3 : Patineur incline, bras le long du corps<a name="5"></a></h2><p>Dans cette situation, il faut appliquer une rotation sur les valeurs du centre de masse et du moment d'inertie trouv&eacute; au cas 1.</p><pre class="codeinput">angle = -pi / 18;
+
+matRotation = [cos(angle),  0, sin(angle)
+               0,           1, 0
+               -sin(angle), 0, cos(angle)];
+pointForceTourne = matRotation * pointForce;
+vitessePatineurTourne = matRotation * vitessePatineur;
+
+centerOfMass_3    = matRotation * centerOfMass;
+momentInertie_3   = matRotation * momentInertie / matRotation;
+momentForce_3     = cross(pointForceTourne - centerOfMass_3,[0;-200;0]);
+accAngulaire_3    = momentInertie_3\momentForce_3;
+momentCinetique_3 = momentInertie_3 * vitessePatineurTourne;
+accAngulaire2_3   = momentInertie_3\(momentForce_3 + cross(momentCinetique_3,vitessePatineurTourne));
+</pre><h2>cas 4 : Patineur incline, bras etendu<a name="6"></a></h2><pre class="codeinput">centerOfMass_4    = matRotation * centerOfMass_2;
+momentInertie_4   = matRotation * momentInertie_2 / matRotation;
+momentForce_4     = cross(pointForceTourne - centerOfMass_4,[0;-200;0]);
+accAngulaire_4    = momentInertie_4\momentForce_4;
+momentCinetique_4 = momentInertie_4 * vitessePatineurTourne;
+accAngulaire2_4   = momentInertie_4\(momentForce_4 + cross(momentCinetique_4,vitessePatineurTourne));
+</pre><h2>Affichage des resultats<a name="7"></a></h2><pre class="codeinput">disp(<span class="string">'Cas 1 : Patineur droit, bras le long du corps'</span>);
+disp(<span class="string">'   Centre de masse:'</span>);
+disp(centerOfMass);
+disp(<span class="string">'   Moment d''inertie: '</span>)
+disp(momentInertie);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:'</span>);
+disp(accAngulaire);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:'</span>);
+disp(accAngulaire2);
+disp(<span class="string">'____________'</span>);
+
+disp(<span class="string">'Cas 2 : Patineur droit, bras &eacute;tendu'</span>);
+disp(<span class="string">'   Centre de masse:'</span>);
+disp(centerOfMass_2);
+disp(<span class="string">'   Moment d''inertie: '</span>)
+disp(momentInertie_2);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:'</span>);
+disp(accAngulaire_2);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:'</span>);
+disp(accAngulaire2_2);
+disp(<span class="string">'____________'</span>);
+
+disp(<span class="string">'Cas 3 : Patineur inclin&eacute;, bras le long du corps'</span>);
+disp(<span class="string">'   Centre de masse:'</span>);
+disp(centerOfMass_3);
+disp(<span class="string">'   Moment d''inertie: '</span>)
+disp(momentInertie_3);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:'</span>);
+disp(accAngulaire_3);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:'</span>);
+disp(accAngulaire2_3);
+disp(<span class="string">'____________'</span>);
+
+disp(<span class="string">'Cas 4 : Patineur inclin&eacute;, bras &eacute;tendu'</span>);
+disp(<span class="string">'   Centre de masse:'</span>);
+disp(centerOfMass_4);
+disp(<span class="string">'   Moment d''inertie: '</span>)
+disp(momentInertie_4);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:'</span>);
+disp(accAngulaire_4);
+disp(<span class="string">'   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:'</span>);
+disp(accAngulaire2_4);
+</pre><pre class="codeoutput">Cas 1 : Patineur droit, bras le long du corps
+   Centre de masse:
+         0
+         0
+    0.9598
+
+   Moment d'inertie: 
+   12.6083         0         0
+         0   12.9313         0
+         0         0    9.9192
+
+   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:
+   10.9484
+         0
+         0
+
+   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:
+   10.9484
+         0
+         0
+
+____________
+Cas 2 : Patineur droit, bras &eacute;tendu
+   Centre de masse:
+   -0.0103
+         0
+    0.9702
+
+   Moment d'inertie: 
+   12.9470         0    0.4927
+         0   13.9167         0
+    0.4927         0   10.4661
+
+   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:
+   10.5284
+         0
+   -0.6934
+
+   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:
+   10.5284
+   -3.5405
+   -0.6934
+
+____________
+Cas 3 : Patineur inclin&eacute;, bras le long du corps
+   Centre de masse:
+   -0.1667
+         0
+    0.9452
+
+   Moment d'inertie: 
+   12.5272         0    0.4599
+         0   12.9313         0
+    0.4599         0   10.0003
+
+   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:
+   10.7820
+         0
+    1.9012
+
+   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:
+   10.7820
+   -0.0000
+    1.9012
+
+____________
+Cas 4 : Patineur inclin&eacute;, bras &eacute;tendu
+   Centre de masse:
+   -0.1787
+         0
+    0.9536
+
+   Moment d'inertie: 
+   12.7037         0    0.8873
+         0   13.9167         0
+    0.8873         0   10.7094
+
+   Acc&eacute;l&eacute;ration angulaire sans vitesse initale:
+   10.4889
+         0
+    1.1453
+
+   Acc&eacute;l&eacute;ration angulaire avec vitesse initiale:
+   10.4889
+   -3.5405
+    1.1453
+
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% PHS4700 : Physique Multimédia - Devoir 1
+% Créé : 17 sept. 2015 
+%
+% Auteurs : 
+%
+% * Alex Gagné (1689761)
+% * Félix La Rocque Cartier (1621348)
+% * Mathieux Gamache (1626377)
+% * Konstantin Fedorov (1679095)
+%
+% Ce travail à pour but de nous familiariser avec les matrices de rotation,
+% du calcul des centres de masses, moments d'inerties et accélérations
+% angulaires dans une application multimédia
+
+%% Déclaration des variables
+
+% Longueurs
+longJamb  = 0.75;
+longTronc = 0.70;
+longCou   = 0.10;
+longBras  = 0.75;
+
+% Rayons
+rayonTete  = 0.10;
+rayonJamb  = 0.06;
+rayonCou   = 0.04;
+rayonBras  = 0.03;
+rayonTronc = 0.15;
+
+% Densités
+densiteTete  = 1056;
+densiteJamb  = 1052;
+densiteTronc = 953;
+densiteCou   = 953;
+densiteBras  = 1052;
+
+% Autres
+pointForce      = [0;0;longJamb+longTronc+longCou+rayonTete];
+vitessePatineur = [0;0;10];
+
+%% Creation de nos parties du corps et calcul de la masse
+% Classes utilisées : <Sphere.html Sphere>, <Cylinder.html Cylinder> qui
+% héritent de <Shape.html Shape>
+%
+% Fonction utilisées : <moveMoment.html moveMoment> 
+rightLeg = Cylinder( [-0.10;0;longJamb/2], densiteJamb, rayonJamb, longJamb, 3 );
+leftLeg  = Cylinder( [0.10;0;longJamb/2], densiteJamb, rayonJamb, longJamb, 3 );
+tronc    = Cylinder( [0;0;longJamb + longTronc/2], densiteTronc, rayonTronc, longTronc, 3 );
+leftArm  = Cylinder( [-rayonTronc-rayonBras;0;longJamb+longTronc-longBras/2], densiteBras, rayonBras, longBras, 3 );
+rightArm = Cylinder( [rayonTronc+rayonBras;0;longJamb+longTronc-longBras/2], densiteBras, rayonBras, longBras, 3 );
+leftArm2 = Cylinder( [-rayonTronc-longBras/2;0;longJamb+longTronc-rayonBras], densiteBras, rayonBras, longBras, 1 );
+neck     = Cylinder( [0;0;longJamb + longTronc + longCou/2], densiteCou, rayonCou, longCou, 3 );
+head     =   Sphere( [0;0;longJamb+longTronc+longCou + rayonTete], densiteTete, rayonTete );
+
+%La masse des parties du corps individuelles sont calculées à leur création
+totalMass = rightLeg.weight ...
+    + leftLeg.weight ...
+    + tronc.weight ...
+    + rightArm.weight ...
+    + leftArm.weight ...
+    + neck.weight ...
+    + head.weight;
+
+%% Cas 1 : patineur droit, bras vertical
+centerOfMass = (rightLeg.centerOfMass * rightLeg.weight ...
+    + leftLeg.centerOfMass * leftLeg.weight ...
+    + tronc.centerOfMass * tronc.weight ...
+    + rightArm.centerOfMass * rightArm.weight ...
+    + leftArm.centerOfMass * leftArm.weight ...
+    + neck.centerOfMass * neck.weight ...
+    + head.centerOfMass * head.weight)...
+    / totalMass;
+
+
+momentInertie = moveMoment(centerOfMass,leftLeg) ...
+    + moveMoment(centerOfMass,rightLeg) ...
+    + moveMoment(centerOfMass,tronc) ...
+    + moveMoment(centerOfMass,rightArm) ...
+    + moveMoment(centerOfMass,leftArm) ...
+    + moveMoment(centerOfMass,neck) ...
+    + moveMoment(centerOfMass,head);
+
+momentForce     = cross(pointForce - centerOfMass, [0;-200;0]);
+accAngulaire    = momentInertie\momentForce; % equivalent a inv(momentGlobal) * momentForce
+momentCinetique = momentInertie*vitessePatineur;
+accAngulaire2   = momentInertie\(momentForce + cross(momentCinetique,vitessePatineur));
+
+%% Cas 2 Patineur droit, bras étendu
+% Les calculs sont les mêmes que pour le premier cas, à la différence que
+% le bras gauche est maintenant étendu
+centerOfMass_2 = (rightLeg.centerOfMass * rightLeg.weight ...
+    + leftLeg.centerOfMass * leftLeg.weight ...
+    + tronc.centerOfMass * tronc.weight ...
+    + rightArm.centerOfMass * rightArm.weight ...
+    + leftArm2.centerOfMass * leftArm.weight ...
+    + neck.centerOfMass * neck.weight ...
+    + head.centerOfMass * head.weight)...
+    / totalMass;
+momentInertie_2 = moveMoment(centerOfMass,leftLeg) ...
+    + moveMoment(centerOfMass,rightLeg) ...
+    + moveMoment(centerOfMass,tronc) ...
+    + moveMoment(centerOfMass,rightArm) ...
+    + moveMoment(centerOfMass,leftArm2) ...
+    + moveMoment(centerOfMass,neck) ...
+    + moveMoment(centerOfMass,head);
+
+
+momentForce_2     = cross(pointForce - centerOfMass_2,[0;-200;0]);
+accAngulaire_2    = momentInertie_2\momentForce_2;
+momentCinetique_2 = momentInertie_2 * vitessePatineur;
+accAngulaire2_2   = momentInertie_2\(momentForce_2 + cross(momentCinetique_2,vitessePatineur));
+
+%% Cas 3 : Patineur incline, bras le long du corps
+% Dans cette situation, il faut appliquer une rotation sur les valeurs du
+% centre de masse et du moment d'inertie trouvé au cas 1.
+angle = -pi / 18;
+
+matRotation = [cos(angle),  0, sin(angle)
+               0,           1, 0
+               -sin(angle), 0, cos(angle)];
+pointForceTourne = matRotation * pointForce;
+vitessePatineurTourne = matRotation * vitessePatineur;
+
+centerOfMass_3    = matRotation * centerOfMass;
+momentInertie_3   = matRotation * momentInertie / matRotation;
+momentForce_3     = cross(pointForceTourne - centerOfMass_3,[0;-200;0]);
+accAngulaire_3    = momentInertie_3\momentForce_3;
+momentCinetique_3 = momentInertie_3 * vitessePatineurTourne;
+accAngulaire2_3   = momentInertie_3\(momentForce_3 + cross(momentCinetique_3,vitessePatineurTourne));
+
+%% cas 4 : Patineur incline, bras etendu
+
+centerOfMass_4    = matRotation * centerOfMass_2;
+momentInertie_4   = matRotation * momentInertie_2 / matRotation;
+momentForce_4     = cross(pointForceTourne - centerOfMass_4,[0;-200;0]);
+accAngulaire_4    = momentInertie_4\momentForce_4;
+momentCinetique_4 = momentInertie_4 * vitessePatineurTourne;
+accAngulaire2_4   = momentInertie_4\(momentForce_4 + cross(momentCinetique_4,vitessePatineurTourne));
+
+
+%% Affichage des resultats
+disp('Cas 1 : Patineur droit, bras le long du corps');
+disp('   Centre de masse:');
+disp(centerOfMass);
+disp('   Moment d''inertie: ')
+disp(momentInertie);
+disp('   Accélération angulaire sans vitesse initale:');
+disp(accAngulaire);
+disp('   Accélération angulaire avec vitesse initiale:');
+disp(accAngulaire2);
+disp('____________');
+
+disp('Cas 2 : Patineur droit, bras étendu');
+disp('   Centre de masse:');
+disp(centerOfMass_2);
+disp('   Moment d''inertie: ')
+disp(momentInertie_2);
+disp('   Accélération angulaire sans vitesse initale:');
+disp(accAngulaire_2);
+disp('   Accélération angulaire avec vitesse initiale:');
+disp(accAngulaire2_2);
+disp('____________');
+
+disp('Cas 3 : Patineur incliné, bras le long du corps');
+disp('   Centre de masse:');
+disp(centerOfMass_3);
+disp('   Moment d''inertie: ')
+disp(momentInertie_3);
+disp('   Accélération angulaire sans vitesse initale:');
+disp(accAngulaire_3);
+disp('   Accélération angulaire avec vitesse initiale:');
+disp(accAngulaire2_3);
+disp('____________');
+
+disp('Cas 4 : Patineur incliné, bras étendu');
+disp('   Centre de masse:');
+disp(centerOfMass_4);
+disp('   Moment d''inertie: ')
+disp(momentInertie_4);
+disp('   Accélération angulaire sans vitesse initale:');
+disp(accAngulaire_4);
+disp('   Accélération angulaire avec vitesse initiale:');
+disp(accAngulaire2_4);
+
+##### SOURCE END #####
+--></body></html>

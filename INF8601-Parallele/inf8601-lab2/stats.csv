@@ -1,0 +1,4 @@
+EXPERIMENT thread=2 width=100 height=100000 repeat=25 hyperthread=1 size(Mib)=3814.697
+func,u,s,e
+slow_f,0.256859,0.001986,0.159811,
+

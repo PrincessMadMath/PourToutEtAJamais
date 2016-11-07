@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="X:\Bureau\PourToutEtAJamais\INF4710 - Introduction Multimedia\TP3\inf4710_a2016_tp3_cpp_v1.1\build\CMakeFiles\44ebf2d655fc86967d5ebae7f4328040\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0CA22DDB-10A3-3198-B22E-B18996BD7ADF}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

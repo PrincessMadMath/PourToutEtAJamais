@@ -86,7 +86,33 @@ void value_color(struct rgb *color, float value, int interval, float interval_in
 	*color = c;
 }
 
-__kernel void sinoscope_kernel()
+
+__kernel void sinoscope_kernel(__global unsigned char *output, const int width, const int interval, const int taylor, const float interval_inv, const float time, const float phase0, const float phase1, const float dx, const float dy)
 {
-	// TODO
+	int x = get_global_id(0);
+	int y = get_global_id(1);
+
+	float px = dx * y - 2 * M_PI;
+	float py = dy * x - 2 * M_PI;
+	
+	// Calcul de la valeur
+	float val = 0.0f;
+	for (int taylor_increment = 1; taylor_increment <= taylor; taylor_increment += 2) {
+		val += sin(px * taylor_increment * phase1 + time) / taylor_increment + cos(py * taylor * phase0) / taylor_increment;
+	}
+	val = (atan(1.0 * val) - atan(-1.0 * val)) / (M_PI);
+	val = (val + 1) * 100;
+		
+	// Calcul de l'index du pixel a colorié
+	int index = (y * 3) + (x * 3) * width;
+	
+	// Calcul couleur resultant du calcul
+	struct rgb c;
+	value_color(&c, val, interval, interval_inv);
+	
+	// Écrit dans output pour que l'hote soit capable de le lire
+	output[index + 0] = c.r;
+	output[index + 1] = c.g;
+	output[index + 2] = c.b;	
 }
+
