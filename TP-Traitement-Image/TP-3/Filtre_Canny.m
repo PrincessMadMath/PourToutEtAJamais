@@ -23,7 +23,19 @@ for m = 1:maxM
     
     % horizontal
     if(dir > 67.5 && dir <= 112.5)
-        if(m > 1)
+        if(n > 1)
+            pixel1 = gmag(n-1, m);
+        end
+        if(n < maxN)
+            pixel2 = gmag(n+1, m);
+        end
+       
+    end
+    
+    % vertical
+    if(dir <= 22.5 || dir > 157.5)        
+        
+         if(m > 1)
             pixel1 = gmag(n, m-1);
         end
         if(m < maxM)
@@ -31,33 +43,23 @@ for m = 1:maxM
         end
     end
     
-    % vertical
-    if(dir <= 22.5 || dir > 157.5)        
-        if(n > 1)
-            pixel1 = gmag(n-1, m);
-        end
-        if(n < maxN)
-            pixel2 = gmag(n+1, m);
-        end
-    end
-    
     % diago /
     if(dir > 112.5 && dir <= 157.5)        
-        if(n > 1 && m < maxM)
-            pixel1 = gmag(n-1, m+1);
-        end
-        if(n < maxN && m > 1)
-            pixel2 = gmag(n+1, m-1);
-        end
-    end
-    
-    % diago \
-    if(dir > 22.5 && dir <= 67.5)        
         if(n > 1 && m > 1)
             pixel1 = gmag(n-1, m-1);
         end
         if(n < maxN && m < maxM)
             pixel2 = gmag(n+1, m+1);
+        end
+    end
+    
+    % diago \
+    if(dir > 22.5 && dir <= 67.5)
+        if(n > 1 && m < maxM)
+            pixel1 = gmag(n-1, m+1);
+        end
+        if(n < maxN && m > 1)
+            pixel2 = gmag(n+1, m-1);
         end
     end
     
@@ -71,6 +73,10 @@ end
 
 maximum_local = image;
 image = image > seuil;
+
+figure;
+imshow(image);
+title('Image Binarise inter');
 
 for n = 1:maxN
 for m = 1:maxM
