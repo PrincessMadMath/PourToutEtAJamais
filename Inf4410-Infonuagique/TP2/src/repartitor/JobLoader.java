@@ -11,6 +11,7 @@ import contract.Job;
 import contract.Operation;
 import contract.OperationType;
 
+// Helper pour loader le fichier d'operation en liste d'operation
 public class JobLoader {
 
 	public static List<Operation> getJob(String path) throws IOException

@@ -8,6 +8,7 @@ import java.rmi.registry.Registry;
 
 import contract.IWorker;
 
+// Helper pour load les Worker-Proxy
 public class WorkerLoader {
 	
 	

@@ -4,19 +4,53 @@ On a pas setup sur OpenStack pour gestion fichiers: en local c'est plus facile Ã
 
 ant
 
-2. Lancer rmi registre
+
+/************** Lancer workers (servers) ********************/
+
+1. Connecter ssh
+
+ssh L4714-01 
+ssh L4714-02
+ssh L4714-03
+ssh L4714-04
+
+2. Aller au projet
+
+cd /usagers/felara/PourToutEtAJamais/Inf4410-Infonuagique/TP2
+
+3. Lancer rmi registre
 
 cd bin
-rmiregistry& [nb port: hard coded 5000]
+rmiregistry 5000 &
+
+(cd ..)
 
 3. Lancer worker (Ã  partir dossier principal)
 
-./worker [config to use (check in worker/ConfigLoader.java)]
 
-4. Utiliser client*
+./worker [config to use (check in worker/ConfigLoader.java)] [ip_adress]
 
-./client [operation path] ["1" to trust worker]
+
+pour 01-02-03-04:
+./worker bad_5 132.207.12.161
+./worker bad_5 132.207.12.162
+./worker bad_5 132.207.12.163
+./worker bad_5 132.207.12.164
+
+alternative a bad_5 : [bad_5, good_
+
+
+/************** Lancer client ********************/
+
+(les ip des workers sont hard-code dans le code)
+
+1. Utiliser client*
+
+./client [operation path] [1 to not trust worker, 0 to trust ]
 
 ex: ./client 0 list
+
+
+/********************/
 
 *si on voudrait l'utiliser sur OpenStack suffit de mettre une vrai adresse (+petite modif dans code)

@@ -13,8 +13,10 @@ import contract.JobResponse;
 import contract.Operation;
 import contract.ResultStatus;
 
-
+// Worker/Server qui vont faire les operations
 public class Worker implements IWorker {
+	
+	private WorkerConfig _config;
 	
 	public static void main(String[] args) throws Exception {
 		if (args.length != 2) {
@@ -24,14 +26,12 @@ public class Worker implements IWorker {
 		String configPath = args[0];
 		String host = args[1];
 		
-		
 		Worker worker = new Worker(configPath, host);
 		
 		worker.run();
 			
 	}
 	
-	private WorkerConfig _config;
 	
 	public Worker(String configPath, String host) throws Exception{
 		super();
@@ -39,6 +39,7 @@ public class Worker implements IWorker {
 		_config = ConfigLoader.LoadConfig(configPath, host);	
 	}
 	
+	// Va s'enregistrer au rmi
 	private void run() {
 		if (System.getSecurityManager() == null) {
 			System.setSecurityManager(new SecurityManager());
@@ -60,7 +61,7 @@ public class Worker implements IWorker {
 		}
 	}
 	
-	
+	// Determine selon workload si prend la job
 	private Boolean doesTakeJob(int operationCount){
 		double refusalTreshold = (operationCount - _config.Capacity) / (4*_config.Capacity);
 		
@@ -72,6 +73,7 @@ public class Worker implements IWorker {
 		return mustTakeJob;
 	}
 	
+	// Determine si doit mentir (basé sur probs)
 	private Boolean mustTroll()
 	{
 		double trollTreshold =  _config.ProbabilityFalseResult;
