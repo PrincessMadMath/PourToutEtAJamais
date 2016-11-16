@@ -1,0 +1,50 @@
+Sources du laboratoire INF8601-lab3
+
+Les exemples proviennent du livre "Using MPI: Portable Parallel Programming
+with the Message-Passing Interface" second edition, MIT Press, 1999, 371 p.
+
+== Dépendances ==
+
+* Ubuntu
+
+  apt-get install build-essential mpich2
+
+En plus, sous Ubuntu il faut installer manuellement la librairie MPE manuellement.
+
+  ftp://ftp.mcs.anl.gov/pub/mpi/mpe/mpe2.tar.gz
+
+Note que pour compiler MPE sans le support pour fortran, utiliser la commande suivante:
+
+  CC=mpicc ./configure --disable-dc --disable-f77
+
+* Fedora
+
+  yum install gcc gcc-c++ automake glibc-devel mpich2-devel
+
+Le laboratoire fonctionne aussi avec OpenMPI, ce qui est installé sur les postes du L-4712.
+
+== Notes de compilation ==
+
+Rendre les fichiers exécutables avec la commande suivante:
+
+  sh fixperms.sh
+
+Tous les avertissements de compilation sont activés par défaut (-Wall).
+
+Voici la commande à utiliser pour compiler dans le laboratoire l4712:
+
+  export LD_LIBRARY_PATH=/usr/lib64/openmpi/lib
+  CFLAGS="-I/usr/include/openmpi-x86_64" LDFLAGS="-L/usr/lib64/openmpi/lib -lmpi" ./configure
+
+== Trucs de débogage ==
+
+* Utiliser les coredump avec gdb
+  ulimit -c unlimited
+  gdb ./src/heatsim ./core
+
+* Annoter la sortie avec le numéro du processus
+  option -prepend-rank de mpirun
+
+* Utiliser les fonction d'impression de grille
+  dump_grid(mygrid);
+

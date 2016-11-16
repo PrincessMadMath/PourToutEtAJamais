@@ -2,8 +2,10 @@
 
 inline int getPartitionIndex(uchar value, size_t N)
 {
-	int intervalCount = 256 / N;
-	return value / intervalCount;
+	float intervalCount = 256.0 / (float) N;
+	int index =  value / intervalCount;
+
+	return index;
 }
 
 cv::Mat tp3::histo(const cv::Mat& oImage, size_t N) {
@@ -17,9 +19,20 @@ cv::Mat tp3::histo(const cv::Mat& oImage, size_t N) {
 		{
 			cv::Vec3b intensity = oImage.at<cv::Vec3b>(row_index, col_index);
 
-			++oHist.at<float>(blue, getPartitionIndex(intensity.val[blue], N));
-			++oHist.at<float>(green, getPartitionIndex(intensity.val[green], N));
-			++oHist.at<float>(red, getPartitionIndex(intensity.val[red], N));
+			int blue_index = getPartitionIndex(intensity.val[blue], N);
+			int green_index = getPartitionIndex(intensity.val[green], N);
+			int red_index = getPartitionIndex(intensity.val[red], N);
+
+			try {
+				++oHist.at<float>(blue, blue_index);
+				++oHist.at<float>(green, green_index);
+				++oHist.at<float>(red, red_index);
+			}
+			catch (...)
+			{
+				std::cout << "Shiiiiiiiiiit";
+			}
+			
 		}
 	}
 

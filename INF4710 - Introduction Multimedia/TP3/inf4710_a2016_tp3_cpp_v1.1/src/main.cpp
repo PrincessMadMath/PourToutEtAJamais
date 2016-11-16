@@ -5,6 +5,12 @@
 using namespace std;
 using namespace cv;
 
+int partition_count = 4;
+int low_trigger = 3000;
+int high_trigger = 30000;
+
+int frame_check_interval = 10;
+
 
 inline void testHistogramme(cv::Mat src, int N)
 {
@@ -48,21 +54,79 @@ inline void testConvolution(cv::Mat src)
 	cv::waitKey(1);
 }
 
+int diffHistogramme(cv::Mat previousHisto, cv::Mat currentHisto)
+{
+	int diff = 0;
+	for (int row_index = 0; row_index < previousHisto.rows; ++row_index)
+	{
+		for (int col_index = 0; col_index < previousHisto.cols; ++col_index)
+		{
+			diff += abs(previousHisto.at<float>(row_index, col_index) - currentHisto.at<float>(row_index, col_index));
+		}
+	}
+	return diff;
+}
+
 
 int main(int /*argc*/, char** /*argv*/) {
     try {
         cv::VideoCapture oCap("../data/TP3_video.avi");
         CV_Assert(oCap.isOpened());
+
+		cv::Mat pastHito;
+		cv::Mat possibleChangingFrame;
+		bool isTransitionning = false;
+		int cumul = 0;
+
         for(int i=0; i<(int)oCap.get(cv::CAP_PROP_FRAME_COUNT); ++i) {
             cv::Mat oImg;
             oCap >> oImg;
             cv::imshow("oImg",oImg);
             cv::waitKey(1);
 
-			//testHistogramme(oImg, 4);
-			testConvolution(oImg);
+			cv::Mat currentHisto = tp3::histo(oImg, partition_count);
 
-			std::cout << "Frame!" << "\n";
+			if (i > 0)
+			{
+				// Calculate diff of histogramme with previous frame
+				int diff = diffHistogramme(pastHito, currentHisto);
+			
+				if (diff > high_trigger)
+				{
+					cout << "************************Changement de frame brusque" << "\n";
+					isTransitionning = false;
+				}
+				else if(i % frame_check_interval == 0) 
+				{
+					if (diff > low_trigger)
+					{ 
+						if (!isTransitionning) {
+							//cout << "Transition start" << "\n";
+							isTransitionning = true;
+							possibleChangingFrame = pastHito;
+						}
+					}
+					else
+					{
+						// Need to compare with frame before possible transition
+						if (isTransitionning) {
+							isTransitionning = false;
+							diff = diffHistogramme(possibleChangingFrame, currentHisto);
+							//cout << "Transition end: " << diff << "\n";
+
+							if (diff > high_trigger)
+							{
+								cout << "************************Changement de frame en fondue" << "\n";
+							}
+						}
+					}
+				}
+			}
+
+			pastHito = currentHisto;
+
+			//testHistogramme(oImg, 4);
+			//testConvolution(oImg);
         }
     }
     catch(const cv::Exception& e) {
@@ -74,5 +138,7 @@ int main(int /*argc*/, char** /*argv*/) {
     catch(...) {
         std::cerr << "Caught unhandled exception." << std::endl;
     }
+
+	cv::waitKey(10000000);
     return 0;
 }
