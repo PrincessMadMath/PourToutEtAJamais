@@ -68,7 +68,6 @@ cv::Mat tp3::convo(const cv::Mat& oImage, const cv::Mat_<float>& oKernel) {
 		{
 			for (int col_index = 0; col_index < oImage.cols; ++col_index)
 			{
-				// TODO : REMOTE THIS 255
 				float resultBlue = calculate_convolution(oImage, oKernel, blue, row_index, col_index) / 255;
 				float resultGreen = calculate_convolution(oImage, oKernel, green, row_index, col_index) / 255;
 				float resultRed = calculate_convolution(oImage, oKernel, red, row_index, col_index) / 255;
