@@ -1,0 +1,70 @@
+#
+# Deploying python on 1 machine
+#
+heat_template_version: 2013-05-23
+
+description: >
+  Deploying python on 1 machine
+
+parameters:
+  key_name:
+    type: string
+    description: Name of an existing key pair to use for the server
+    default: cloud-server
+  flavor:
+    type: string
+    description: Flavor utilisee par les serveurs
+    default: INF4410-mini
+
+  image:
+    type: string
+    description: Image utilisee pour les serveurs
+    default: INF4410-Ubuntu-trusty-mini
+    
+  network_id:
+    type: string
+    description: Id du network a utilise
+    default: cac571ab-8e5c-4332-8e05-4c69a56bda9e
+    
+  server_url:
+    type: string
+    description: Liens git du serveur a download
+    default: https://raw.githubusercontent.com/houssemmh/INF4410-TP3/master/server.py
+    
+
+resources:
+  server:
+    type: OS::Nova::Server
+    properties:
+      key_name: { get_param: key_name }
+      image: { get_param: image }
+      flavor: { get_param: flavor }
+      networks:
+        - network: { get_param: network_id }
+      user_data_format: RAW
+      user_data:
+        str_replace:
+          template: |
+            #!/bin/bash
+            curl server_url -o server.py -s;
+            python server.py;
+          params:
+            server_url: { get_param: server_url }
+            
+  floating_ip:
+    type: OS::Nova::FloatingIP
+    properties:
+      pool: ext-net
+       
+  association:
+    type: OS::Nova::FloatingIPAssociation
+    properties:
+      floating_ip: {get_resource: floating_ip}
+      server_id: {get_resource: server}
+     
+
+outputs:
+  server_networks:
+    description: The networks of the deployed server
+    value: { get_attr: [server, networks] }
+
