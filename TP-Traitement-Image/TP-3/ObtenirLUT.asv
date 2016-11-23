@@ -1,0 +1,16 @@
+function [ table_conversion ] = ObtenirLUT( nb_segments )
+
+%% Discretisation du cube RGB
+
+segment_size = ceil(255 / nb_segments);
+table_conversion = zeros(256,1);
+
+for i = 1:255
+    index = i / segment_size;
+    low = index * segment_size;
+    high = (index+1) * segment_size - 1;
+    table_conversion(i) = ( low + high ) / 2;
+end
+
+end
+

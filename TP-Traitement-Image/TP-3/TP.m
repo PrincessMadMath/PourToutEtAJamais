@@ -1,5 +1,7 @@
 type Filtre_Canny.m;
 type Calculer_Precision.m;
+type ObtenirLUT.m
+type Segmenter_Couleur.m
 
 %% Exercice 1
 
@@ -98,4 +100,16 @@ end
 
 %% Exercice 3 - Segmantation par couleurs
 
+% 1) Charger image
+imageChateau = imread('chateau.jpg');
+
+figure;
+imshow(imageChateau);
+title('Image Chateau');
+
+% 2) Fonction ObtenirLUT
+
+lutTable = ObtenirLUT(2);
+
+% 3) Fonction Segmenter_Couleur
 
