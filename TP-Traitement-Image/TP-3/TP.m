@@ -47,7 +47,7 @@ title('Image Escalier');
 % 2) Filtre Canny
 gaussien = fspecial('gaussian', 3, 0.5);
 
-img_bin = Filtre_Canny(imageEscalier, gaussien, 20);
+img_bin = Filtre_Canny(imageEscalier, gaussien, 80);
 
 figure;
 imshow(img_bin);
@@ -68,4 +68,34 @@ figure;
 imshow(escalier_truSeg);
 title('True Segmantation');
 [ perfo, tpf, tfn ] = Calculer_Precision(img_bin,escalier_truSeg);
+
+% 5) Detection des lignes verticales 
+
+I = imread('escaliers.jpg');
+BW = edge(I,'canny');
+[H,T,R] = hough(BW,'Theta', -10:.5:10);
+P  = houghpeaks(H,20,'threshold',ceil(0.3*max(H(:))));
+
+lines = houghlines(BW,T,R,P);
+
+figure, imshow(I), hold on
+max_len = 0;
+for k = 1:length(lines)
+   xy = [lines(k).point1; lines(k).point2];
+   plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+
+   % Plot beginnings and ends of lines
+   plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+   plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+
+   % Determine the endpoints of the longest line segment
+   len = norm(lines(k).point1 - lines(k).point2);
+   if ( len > max_len)
+      max_len = len;
+      xy_long = xy;
+   end
+end
+
+%% Exercice 3 - Segmantation par couleurs
+
 
