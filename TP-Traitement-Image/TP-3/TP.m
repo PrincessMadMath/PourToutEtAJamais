@@ -64,7 +64,7 @@ escalier_truSeg = imread('escaliers_TrueSeg.jpg') > 128;
 % ambiant (dans les planche du plancher)
 
 % Seuil de 70 => perfo = 0.2696
-% SEuil de 20 => perfo = 0.1994
+% Seuil de 20 => perfo = 0.1994
 
 figure;
 imshow(escalier_truSeg);
@@ -109,8 +109,76 @@ title('Image Chateau');
 
 % 2) Fonction ObtenirLUT
 
-lutTable = ObtenirLUT(2);
-
 % 3) Fonction Segmenter_Couleur
 
-Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+% 4) Segmenter et afficher le chateau
+
+lutTable = ObtenirLUT(8);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 8');
+
+% 5) Determination nombre de segment
+
+lutTable = ObtenirLUT(2);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+% Comme on peut voir dans la prochaine figure, l'image est identique avec 2
+% segments
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 2');
+
+%% Exercice 4 - Toon/Paint Shading
+
+% 1) Image Show
+image_albert = imread('Albert-Einstein.jpg');
+figure;
+imshow(image_albert);
+title('Albert Einstein');
+
+% 2) Segmentation
+seg_albert = Segmenter_Couleur(image_albert, ObtenirLUT(10), ObtenirLUT(8), ObtenirLUT(8));
+
+figure;
+imshow(seg_albert);
+title('Albert Segmenter en 10(rouge) 8(vert)8(bleu)');
+
+% 3) Filtre et fspecial
+gaussien = fspecial('gaussian', 7, 1);
+image_conv = uint8(convn(seg_albert,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Albert Avec convolution gaussien');
+
+% 4) Filtre de canny (contours)
+img_bin_r = Filtre_Canny(image_conv(:,:,1), gaussien, 100);
+img_bin_g = Filtre_Canny(image_conv(:,:,2), gaussien, 100);
+img_bin_b = Filtre_Canny(image_conv(:,:,3), gaussien, 100);
+
+sum = img_bin_r + img_bin_g + img_bin_b;
+moy = logical(sum ./ 3);
+inv = ~moy;
+
+figure;
+imshow(inv);
+title('Filtre Contour');
+
+% 5) 
+image_conv = uint8(conv2(inv .* 255,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Contour et gaussien');
+
+% 6)
+seg_albert(:,:,1) = uint8(double(seg_albert(:,:,1)) .* double(image_conv)/255);
+seg_albert(:,:,2) = uint8(double(seg_albert(:,:,2)) .* double(image_conv)/255);
+seg_albert(:,:,3) = uint8(double(seg_albert(:,:,3)) .* double(image_conv)/255);
+
+figure;
+imshow(seg_albert);
+title('Albert look peinture');
