@@ -196,7 +196,7 @@ void free_ctx(ctx_t *ctx) {
 }
 
 int init_ctx(ctx_t *ctx, opts_t *opts) {
-	TODO("lab3");
+
 	MPI_Comm_size(MPI_COMM_WORLD, &ctx->numprocs);
 	MPI_Comm_rank(MPI_COMM_WORLD, &ctx->rank);
 
@@ -217,7 +217,7 @@ int init_ctx(ctx_t *ctx, opts_t *opts) {
 
 	// Create new comm where easy to find neighbor (2: north, south, east, west)
 	MPI_Cart_create(MPI_COMM_WORLD, DIM_2D, ctx->dims, ctx->isperiodic,
-		ctx->reorder, &ctx->comm2d)
+		ctx->reorder, &ctx->comm2d);
 	
 	// Calculate neighbor by direction
 	MPI_Cart_shift(ctx->comm2d, 1, 1,  &ctx->north_peer, &ctx->south_peer);
@@ -260,33 +260,35 @@ int init_ctx(ctx_t *ctx, opts_t *opts) {
 		 * Comment traiter le cas de rank=0 ? -> RIP
 		 */
 		 
+		 // Init request and status memory for message
+		MPI_Request *request = malloc(nb_tags * ctx->numprocs * sizeof(MPI_Request));
+		MPI_Status *status = malloc(nb_tags * ctx->numprocs * sizeof(MPI_Status));
 		 
-		 for(int slave_index = 1; slave_index < ctx->numprocs; ++slave_index)
+		 int slave_index = 1;
+		 for(slave_index = 1; slave_index < ctx->numprocs; ++slave_index)
 		 {
 			 // Current slave coords
 			 int slave_coords[DIM_2D];		 
 			 MPI_Cart_coords(ctx->comm2d, slave_index, DIM_2D,slave_coords);
 			 
 			 // Get grid of current slave
-			 grid_t *grid = cart2d_get_grid(ctx->cart, slave_coords[0], slave_coords[1]);.
+			 grid_t *grid = cart2d_get_grid(ctx->cart, slave_coords[0], slave_coords[1]);
 			 
 			 // Send data to that slave
-			 MPI_Isend(&grid->width, 1, MPI_INTEGER, slave_index, dir_1, cmd->comm2d, &req[slave_index * nb_tags + tag_1]);
-			 MPI_Isend(&grid->height, 1, MPI_INTEGER, slave_index, dir_2, cmd->comm2d, &req[slave_index * nb_tags + tag_2]);
-			 MPI_Isend(&grid->padding, 1, MPI_INTEGER, slave_index, dir_3, cmd->comm2d, &req[slave_index * nb_tags + tag_3]);
+			 MPI_Isend(&grid->width, 1, MPI_INTEGER, slave_index, tag_1, ctx->comm2d, &request[slave_index * nb_tags + tag_1]);
+			 MPI_Isend(&grid->height, 1, MPI_INTEGER, slave_index, tag_2, ctx->comm2d, &request[slave_index * nb_tags + tag_2]);
+			 MPI_Isend(&grid->padding, 1, MPI_INTEGER, slave_index, tag_3, ctx->comm2d, &request[slave_index * nb_tags + tag_3]);
 			 // Send grid
-			 MPI_Isend(&grid->dbl, grid->pw * grid->ph, MPI_DOUBLE, slave_index, dir_4, cmd->comm2d, &req[slave_index * nb_tags + tag_4]);
+			 MPI_Isend(&grid->dbl, grid->pw * grid->ph, MPI_DOUBLE, slave_index, tag_4, ctx->comm2d, &request[slave_index * nb_tags + tag_4]);
 		 }
 		 
-		// Init request and status memory for message
-		MPI_Request *request = malloc(nb_tags * ctx->numprocs * sizeof(MPI_Request));
-		MPI_Status *status = malloc(nb_tags * ctx->numprocs * sizeof(MPI_Status));
-		 
+		
 		 // Wait for all message to be send to every neighbors of every case
-		 MPI_WaitAll(nb_tags * (ctx->numprocs - 1), request, status);
+		 MPI_Waitall(nb_tags * (ctx->numprocs - 1), request, status);
 		 
 		 // Calcul pour rank == 0
-		 MPI_Cart_coords(ctx->comm2d, ctx->rank, DIM_2D, ctx->coords);
+		 int coords[DIM_2D];
+		 MPI_Cart_coords(ctx->comm2d, ctx->rank, DIM_2D, coords);
 		 new_grid = cart2d_get_grid(ctx->cart, coords[0], coords[1]);
 	 }
 	 else{
@@ -294,18 +296,18 @@ int init_ctx(ctx_t *ctx, opts_t *opts) {
 		MPI_Status status[nb_tags];
 		
 		// Data to received
-		int wight, height, padding;
+		int width, height, padding;
 		
 		MPI_Irecv(&width, 1, MPI_INTEGER, 0, tag_1, ctx->comm2d, &request[0]);
 		MPI_Irecv(&height, 1, MPI_INTEGER, 0, tag_2, ctx->comm2d, &request[1]);
 		MPI_Irecv(&padding, 1, MPI_INTEGER, 0, tag_3, ctx->comm2d, &request[2]);
 		
-		MPI_WaitAll(3, request, status);
+		MPI_Waitall(3, request, status);
 		 
 		// Now that we know how to init grid we will make it and receive it
 		 new_grid = make_grid(width, height, padding);
-		 MPI_Irecv(new_grid->dbl, new_grid->pw * new_grid->ph, MPI_DOUBLE, 0, tag4, ctx->comm2d, &request[3]);
-		 MPI_Waitall(1, request[3], status[3]);
+		 MPI_Irecv(new_grid->dbl, new_grid->pw * new_grid->ph, MPI_DOUBLE, 0, tag_4, ctx->comm2d, &request[3]);
+		 MPI_Waitall(1, request+3, status+3);
 		
 	 
 	 }
@@ -319,7 +321,7 @@ int init_ctx(ctx_t *ctx, opts_t *opts) {
 	free_grid(new_grid);
 
 	/* FIXME: create type vector to exchange columns */
-	MPI_Type_Vector(ctx->curr_grid->height, 1, ctx->curr_grid->pw, MPI_DOUBLE, &ctx->vector);
+	MPI_Type_vector(ctx->curr_grid->height, 1, ctx->curr_grid->pw, MPI_DOUBLE, &ctx->vector);
 	MPI_Type_commit(&ctx->vector);
 
 	return 0;
@@ -336,39 +338,100 @@ void dump_ctx(ctx_t *ctx) {
 }
 
 void exchng2d(ctx_t *ctx) {
-	/*
-	 *  FIXME: Echanger les bordures avec les voisins
-	 * 4 echanges doivent etre effectues
-	 */
-	TODO("lab3");
-	/*
-	 grid_t *grid = ctx->next_grid;
-	 int width = grid->pw;
-	 int height = grid->ph;
-	 int *data = grid->data;
-	 MPI_Comm comm = ctx->comm2d;
-	 MPI_Request req[8];
-	 MPI_Status status[8];
-	 */
+	// Get grid data
+	grid_t *grid = ctx->next_grid;
+	int width = grid->pw;
+	int height = grid->ph;
+	int *data = grid->data;
+	
+	MPI_Comm comm = ctx->comm2d;
+	MPI_Request req[8];
+	MPI_Status status[8];
+	
+	// Calculate shift for every direction (N,S,W,E)
+	
+	// North <-> South
+	int *date_to_south = data + (height - 2) * width;
+	int *data_from_south = data + (height -1) * width;
+	
+	MPI_Isend(date_to_south, width, MPI_INTEGER, ctx->south_peer, 0, comm, &req[0]);
+	MPI_Irecv(data_from_south, width, MPI_INTEGER, ctx->south_peer, 0, comm, &req[1]);
+	
+	
+	// South <-> north	
+	int *date_to_north = data + width;
+	int *data_from_north = data;
+	
+	MPI_Isend(date_to_north, width, MPI_INTEGER, ctx->north_peer, 0, comm, &req[2]);
+	MPI_Irecv(data_from_north, width, MPI_INTEGER, ctx->north_peer, 0, comm, &req[3]);
+	
+	// West <-> East
+	int *date_to_east = data + (width - 2);
+	int *data_from_east = data + (width -1);
+	
+	MPI_Isend(date_to_east, width, MPI_INTEGER, ctx->east_peer, 0, comm, &req[4]);
+	MPI_Irecv(data_from_east, width, MPI_INTEGER, ctx->east_peer, 0, comm, &req[5]);
+	
+	// West <-> East
+	int *date_to_west = data + 1;
+	int *data_from_west = data;
+	
+	MPI_Isend(date_to_west, width, MPI_INTEGER, ctx->west_peer, 0, comm, &req[5]);
+	MPI_Irecv(data_from_west, width, MPI_INTEGER, ctx->west_peer, 0, comm, &req[6]);	
+	
+	MPI_Waitall(8, req, status);
 }
 
 int gather_result(ctx_t *ctx, opts_t *opts) {
-	TODO("lab3");
 
 	int ret = 0;
 	grid_t *local_grid = grid_padding(ctx->next_grid, 0);
 	if (local_grid == NULL)
 		goto err;
 
-	/*
-	 * FIXME: transfer simulation results from all process to rank=0
-	 * use grid for this purpose
-	 */
-
-	/* now we can merge all data blocks, reuse global_grid */
-	//cart2d_grid_merge(ctx->cart, ctx->global_grid);
-	/* temporairement copie de next_grid */
-	grid_copy(ctx->next_grid, ctx->global_grid);
+	MPI_Comm comm = ctx->comm2d;
+	
+	int nb_other_process = ctx->numprocs - 1;
+	
+	// If master : wait to receive everybody and merge!
+	if(ctx->rank == 0)
+	{
+		
+		
+		MPI_Request *req = (MPI_Request *) calloc(nb_other_process, sizeof(MPI_Request));
+		MPI_Status *status = (MPI_Status *) calloc(nb_other_process, sizeof(MPI_Status));
+		
+		for(int process_index = 0; process_index < ctx->numprocs;  ++process_index)
+		{
+			int coords[DIM_2D];
+			MPI_Cart_coords(comm, process_index, DIM_2D, coords);
+			grid_t *current_grid = cart2d_get_grid(ctx->cart, coords[0], coords[1]);
+			
+			if(process_index == 0)
+			{
+				 // This is the grid to be handle by the master
+				 grid_copy(local_grid,current_grid);
+			}
+			else
+			{
+				// Get grid of other process
+				int grid_size = current_grid->width * current_grid->height;
+				MPI_Irecv(current_grid->dbl, grid_size, MPI_DOUBLE, process_index, 0, comm, &req[process_index]);
+			}
+		}
+		// Wait for everybody
+		MPI_Waitall(nb_other_process, req, status);
+		
+		// Merge
+		cart2d_grid_merge(ctx->cart, ctx->global_grid);
+	}
+	// On other process send to master!
+	else
+	{
+		int grid_size = local_grid->width*local_grid->height;
+		MPI_Send(local_grid->dbl, grid_size, MPI_DOUBLE, 0, 0, comm);	 
+	}
+	
 
 	done: free_grid(local_grid);
 	return ret;
