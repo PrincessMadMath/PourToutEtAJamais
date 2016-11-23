@@ -113,3 +113,4 @@ lutTable = ObtenirLUT(2);
 
 % 3) Fonction Segmenter_Couleur
 
+Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
