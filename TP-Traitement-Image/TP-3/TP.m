@@ -1,5 +1,7 @@
 type Filtre_Canny.m;
 type Calculer_Precision.m;
+type ObtenirLUT.m
+type Segmenter_Couleur.m
 
 %% Exercice 1
 
@@ -47,7 +49,7 @@ title('Image Escalier');
 % 2) Filtre Canny
 gaussien = fspecial('gaussian', 3, 0.5);
 
-img_bin = Filtre_Canny(imageEscalier, gaussien, 20);
+img_bin = Filtre_Canny(imageEscalier, gaussien, 80);
 
 figure;
 imshow(img_bin);
@@ -62,10 +64,121 @@ escalier_truSeg = imread('escaliers_TrueSeg.jpg') > 128;
 % ambiant (dans les planche du plancher)
 
 % Seuil de 70 => perfo = 0.2696
-% SEuil de 20 => perfo = 0.1994
+% Seuil de 20 => perfo = 0.1994
 
 figure;
 imshow(escalier_truSeg);
 title('True Segmantation');
 [ perfo, tpf, tfn ] = Calculer_Precision(img_bin,escalier_truSeg);
 
+% 5) Detection des lignes verticales 
+
+I = imread('escaliers.jpg');
+BW = edge(I,'canny');
+[H,T,R] = hough(BW,'Theta', -10:.5:10);
+P  = houghpeaks(H,20,'threshold',ceil(0.3*max(H(:))));
+
+lines = houghlines(BW,T,R,P);
+
+figure, imshow(I), hold on
+max_len = 0;
+for k = 1:length(lines)
+   xy = [lines(k).point1; lines(k).point2];
+   plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+
+   % Plot beginnings and ends of lines
+   plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+   plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+
+   % Determine the endpoints of the longest line segment
+   len = norm(lines(k).point1 - lines(k).point2);
+   if ( len > max_len)
+      max_len = len;
+      xy_long = xy;
+   end
+end
+
+%% Exercice 3 - Segmantation par couleurs
+
+% 1) Charger image
+imageChateau = imread('chateau.jpg');
+
+figure;
+imshow(imageChateau);
+title('Image Chateau');
+
+% 2) Fonction ObtenirLUT
+
+% 3) Fonction Segmenter_Couleur
+
+% 4) Segmenter et afficher le chateau
+
+lutTable = ObtenirLUT(8);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 8');
+
+% 5) Determination nombre de segment
+
+lutTable = ObtenirLUT(2);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+% Comme on peut voir dans la prochaine figure, l'image est identique avec 2
+% segments
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 2');
+
+%% Exercice 4 - Toon/Paint Shading
+
+% 1) Image Show
+image_albert = imread('Albert-Einstein.jpg');
+figure;
+imshow(image_albert);
+title('Albert Einstein');
+
+% 2) Segmentation
+seg_albert = Segmenter_Couleur(image_albert, ObtenirLUT(10), ObtenirLUT(8), ObtenirLUT(8));
+
+figure;
+imshow(seg_albert);
+title('Albert Segmenter en 10(rouge) 8(vert)8(bleu)');
+
+% 3) Filtre et fspecial
+gaussien = fspecial('gaussian', 7, 1);
+image_conv = uint8(convn(seg_albert,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Albert Avec convolution gaussien');
+
+% 4) Filtre de canny (contours)
+img_bin_r = Filtre_Canny(image_conv(:,:,1), gaussien, 100);
+img_bin_g = Filtre_Canny(image_conv(:,:,2), gaussien, 100);
+img_bin_b = Filtre_Canny(image_conv(:,:,3), gaussien, 100);
+
+sum = img_bin_r + img_bin_g + img_bin_b;
+moy = logical(sum ./ 3);
+inv = ~moy;
+
+figure;
+imshow(inv);
+title('Filtre Contour');
+
+% 5) 
+image_conv = uint8(conv2(inv .* 255,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Contour et gaussien');
+
+% 6)
+seg_albert(:,:,1) = uint8(double(seg_albert(:,:,1)) .* double(image_conv)/255);
+seg_albert(:,:,2) = uint8(double(seg_albert(:,:,2)) .* double(image_conv)/255);
+seg_albert(:,:,3) = uint8(double(seg_albert(:,:,3)) .* double(image_conv)/255);
+
+figure;
+imshow(seg_albert);
+title('Albert look peinture');

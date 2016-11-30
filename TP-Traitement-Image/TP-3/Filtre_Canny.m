@@ -74,9 +74,9 @@ end
 maximum_local = image;
 image = image > seuil;
 
-figure;
-imshow(image);
-title('Image Binarise inter');
+% figure;
+% imshow(image);
+% title('Image Binarise inter');
 
 for n = 1:maxN
 for m = 1:maxM

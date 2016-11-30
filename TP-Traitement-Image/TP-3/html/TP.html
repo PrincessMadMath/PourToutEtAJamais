@@ -1,0 +1,591 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.0"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-11-23"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Exercice 1</a></li><li><a href="#3">Exercice 2</a></li><li><a href="#4">Exercice 3 - Segmantation par couleurs</a></li><li><a href="#5">Exercice 4 - Toon/Paint Shading</a></li></ul></div><pre class="codeinput">type <span class="string">Filtre_Canny.m</span>;
+type <span class="string">Calculer_Precision.m</span>;
+type <span class="string">ObtenirLUT.m</span>
+type <span class="string">Segmenter_Couleur.m</span>
+</pre><pre class="codeoutput">
+function [ image ] = Filtre_Canny( image, masque, seuil )
+
+tb = 0.4;
+
+% lissage gaussien (reduction du bruit)
+image_filtre = imfilter(image, masque);
+
+% calcul du gradient (intensite des contours)
+[gmag, gdir] = imgradient(image_filtre);
+
+% recherche max locaux
+maxN = size(image,1);
+maxM = size(image,2);
+
+for n = 1:maxN
+for m = 1:maxM
+
+    pixel1 = 0;
+    pixel2 = 0;
+    pixel = gmag(n,m);
+    
+    dir = abs(gdir(n,m));
+    
+    % horizontal
+    if(dir &gt; 67.5 &amp;&amp; dir &lt;= 112.5)
+        if(n &gt; 1)
+            pixel1 = gmag(n-1, m);
+        end
+        if(n &lt; maxN)
+            pixel2 = gmag(n+1, m);
+        end
+       
+    end
+    
+    % vertical
+    if(dir &lt;= 22.5 || dir &gt; 157.5)        
+        
+         if(m &gt; 1)
+            pixel1 = gmag(n, m-1);
+        end
+        if(m &lt; maxM)
+            pixel2 = gmag(n, m+1);
+        end
+    end
+    
+    % diago /
+    if(dir &gt; 112.5 &amp;&amp; dir &lt;= 157.5)        
+        if(n &gt; 1 &amp;&amp; m &gt; 1)
+            pixel1 = gmag(n-1, m-1);
+        end
+        if(n &lt; maxN &amp;&amp; m &lt; maxM)
+            pixel2 = gmag(n+1, m+1);
+        end
+    end
+    
+    % diago \
+    if(dir &gt; 22.5 &amp;&amp; dir &lt;= 67.5)
+        if(n &gt; 1 &amp;&amp; m &lt; maxM)
+            pixel1 = gmag(n-1, m+1);
+        end
+        if(n &lt; maxN &amp;&amp; m &gt; 1)
+            pixel2 = gmag(n+1, m-1);
+        end
+    end
+    
+    if(pixel &gt; pixel1 &amp;&amp; pixel &gt; pixel2)
+        image(n,m) = pixel;
+    else
+        image(n,m) = 0;
+    end
+end
+end
+
+maximum_local = image;
+image = image &gt; seuil;
+
+% figure;
+% imshow(image);
+% title('Image Binarise inter');
+
+for n = 1:maxN
+for m = 1:maxM
+    pixel = image(n,m);
+    
+    if(pixel == 1)
+        % check horizontale
+        if(m &gt; 1 &amp;&amp; m &lt; maxM)
+            % pixel de droite
+            if(image(n, m-1) == 1 &amp;&amp; maximum_local(n, m+1) &gt; tb)
+                image(n,m+1) = 1;
+            end
+            
+            %pixel de gauche
+            if(image(n, m+1) == 1 &amp;&amp; maximum_local(n, m-1) &gt; tb)
+                image(n,m-1) = 1;
+            end
+        end
+        
+        % check verticale
+        if(n &gt; 1 &amp;&amp; n &lt; maxN)
+            % pixel de droite
+            if(image(n-1, m) == 1 &amp;&amp; maximum_local(n+1, m) &gt; tb)
+                image(n+1,m) = 1;
+            end
+            
+            %pixel de gauche
+            if(image(n+1, m) == 1 &amp;&amp; maximum_local(n-1, m) &gt; tb)
+                image(n-1,m) = 1;
+            end
+        end
+    end
+end
+end
+
+end
+
+function [ perfo, tpf, tfn ] = Calculer_Precision( image_seg, image_ref )
+
+contour_detecte = sum(sum(image_seg));
+contour_reference = sum(sum(image_ref));
+
+contour_correct = sum(sum(image_seg &amp; image_ref));
+
+faux_pos = contour_detecte - contour_correct;
+faux_neg = contour_reference - contour_correct;
+
+denum = (contour_correct + faux_pos + faux_neg);
+perfo = contour_correct / denum;
+
+tpf = faux_pos / denum;
+tfn = faux_neg / denum;
+end
+
+function [ table_conversion ] = ObtenirLUT( nb_segments )
+
+%% Discretisation du cube RGB
+
+segment_size = ceil(256 / nb_segments);
+table_conversion = uint8(zeros(256,1));
+
+for i = 0:255
+    index = floor(i / segment_size);
+    low = index * segment_size;
+    high = min((index+1) * segment_size - 1, 255);
+    table_conversion(i+1) = uint8(floor(( low + high ) / 2));
+end
+
+end
+
+
+function [ output_args ] = Segmenter_Couleur( image_couleur, LUT_r, LUT_g, LUT_b )
+
+output_args(:,:,1) = intlut(image_couleur(:,:,1), LUT_r);
+output_args(:,:,2) = intlut(image_couleur(:,:,2), LUT_g);
+output_args(:,:,3) = intlut(image_couleur(:,:,3), LUT_b);
+
+end
+
+</pre><h2>Exercice 1<a name="2"></a></h2><pre class="codeinput"><span class="comment">% 1) Charger l'image</span>
+imgageVoiture = imread(<span class="string">'Formula_Ford.png'</span>);
+
+figure;
+imshow(imgageVoiture);
+title(<span class="string">'Image Voiture'</span>);
+
+<span class="comment">% 2) Construction PSF</span>
+PSF = fspecial(<span class="string">'motion'</span>, 30, 25);
+
+<span class="comment">% 3) Deconvolution</span>
+k = 0;
+imageUnblured = deconvwnr(imgageVoiture, PSF, k);
+
+figure;
+imshow(imageUnblured);
+title(<span class="string">'Unblured Voiture'</span>);
+
+<span class="comment">% 4) Meilleure estimation</span>
+I = im2double(imgageVoiture);
+noise_var = 0.0001;
+k = noise_var / var(I(:));
+
+<span class="comment">% 5) Deconvoluer image</span>
+imageUnblured = deconvwnr(imgageVoiture, PSF, k);
+
+figure;
+imshow(imageUnblured);
+title(<span class="string">'Unblured Voiture (better k)'</span>);
+
+<span class="comment">% Nous pouvons transmettre que la plaque d'imatriculation est : FF12 FMC</span>
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <img vspace="5" hspace="5" src="TP_02.png" alt=""> <img vspace="5" hspace="5" src="TP_03.png" alt=""> <h2>Exercice 2<a name="3"></a></h2><pre class="codeinput"><span class="comment">% 1) Charger image</span>
+imageEscalier = imread(<span class="string">'escaliers.jpg'</span>);
+
+figure;
+imshow(imageEscalier);
+title(<span class="string">'Image Escalier'</span>);
+
+<span class="comment">% 2) Filtre Canny</span>
+gaussien = fspecial(<span class="string">'gaussian'</span>, 3, 0.5);
+
+img_bin = Filtre_Canny(imageEscalier, gaussien, 80);
+
+figure;
+imshow(img_bin);
+title(<span class="string">'Image Binarise final'</span>);
+
+<span class="comment">% 3) Fonction Calculer_Precision</span>
+
+<span class="comment">% 4) Charger image escalier</span>
+escalier_truSeg = imread(<span class="string">'escaliers_TrueSeg.jpg'</span>) &gt; 128;
+
+<span class="comment">% On remarque que plus on diminue le seuil, plus on observe du bruit</span>
+<span class="comment">% ambiant (dans les planche du plancher)</span>
+
+<span class="comment">% Seuil de 70 =&gt; perfo = 0.2696</span>
+<span class="comment">% Seuil de 20 =&gt; perfo = 0.1994</span>
+
+figure;
+imshow(escalier_truSeg);
+title(<span class="string">'True Segmantation'</span>);
+[ perfo, tpf, tfn ] = Calculer_Precision(img_bin,escalier_truSeg);
+
+<span class="comment">% 5) Detection des lignes verticales</span>
+
+I = imread(<span class="string">'escaliers.jpg'</span>);
+BW = edge(I,<span class="string">'canny'</span>);
+[H,T,R] = hough(BW,<span class="string">'Theta'</span>, -10:.5:10);
+P  = houghpeaks(H,20,<span class="string">'threshold'</span>,ceil(0.3*max(H(:))));
+
+lines = houghlines(BW,T,R,P);
+
+figure, imshow(I), hold <span class="string">on</span>
+max_len = 0;
+<span class="keyword">for</span> k = 1:length(lines)
+   xy = [lines(k).point1; lines(k).point2];
+   plot(xy(:,1),xy(:,2),<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,<span class="string">'green'</span>);
+
+   <span class="comment">% Plot beginnings and ends of lines</span>
+   plot(xy(1,1),xy(1,2),<span class="string">'x'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,<span class="string">'yellow'</span>);
+   plot(xy(2,1),xy(2,2),<span class="string">'x'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'Color'</span>,<span class="string">'red'</span>);
+
+   <span class="comment">% Determine the endpoints of the longest line segment</span>
+   len = norm(lines(k).point1 - lines(k).point2);
+   <span class="keyword">if</span> ( len &gt; max_len)
+      max_len = len;
+      xy_long = xy;
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+</pre><img vspace="5" hspace="5" src="TP_04.png" alt=""> <img vspace="5" hspace="5" src="TP_05.png" alt=""> <img vspace="5" hspace="5" src="TP_06.png" alt=""> <img vspace="5" hspace="5" src="TP_07.png" alt=""> <h2>Exercice 3 - Segmantation par couleurs<a name="4"></a></h2><pre class="codeinput"><span class="comment">% 1) Charger image</span>
+imageChateau = imread(<span class="string">'chateau.jpg'</span>);
+
+figure;
+imshow(imageChateau);
+title(<span class="string">'Image Chateau'</span>);
+
+<span class="comment">% 2) Fonction ObtenirLUT</span>
+
+<span class="comment">% 3) Fonction Segmenter_Couleur</span>
+
+<span class="comment">% 4) Segmenter et afficher le chateau</span>
+
+lutTable = ObtenirLUT(8);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+figure;
+imshow(seg_chateau);
+title(<span class="string">'Chateau Segmenter en 8'</span>);
+
+<span class="comment">% 5) Determination nombre de segment</span>
+
+lutTable = ObtenirLUT(2);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+<span class="comment">% Comme on peut voir dans la prochaine figure, l'image est identique avec 2</span>
+<span class="comment">% segments</span>
+figure;
+imshow(seg_chateau);
+title(<span class="string">'Chateau Segmenter en 2'</span>);
+</pre><pre class="codeoutput">Warning: Image is too big to fit on screen; displaying at 67% 
+Warning: Image is too big to fit on screen; displaying at 67% 
+Warning: Image is too big to fit on screen; displaying at 67% 
+</pre><img vspace="5" hspace="5" src="TP_08.png" alt=""> <img vspace="5" hspace="5" src="TP_09.png" alt=""> <img vspace="5" hspace="5" src="TP_10.png" alt=""> <h2>Exercice 4 - Toon/Paint Shading<a name="5"></a></h2><pre class="codeinput"><span class="comment">% 1) Image Show</span>
+image_albert = imread(<span class="string">'Albert-Einstein.jpg'</span>);
+figure;
+imshow(image_albert);
+title(<span class="string">'Albert Einstein'</span>);
+
+<span class="comment">% 2) Segmentation</span>
+seg_albert = Segmenter_Couleur(image_albert, ObtenirLUT(10), ObtenirLUT(8), ObtenirLUT(8));
+
+figure;
+imshow(seg_albert);
+title(<span class="string">'Albert Segmenter en 10(rouge) 8(vert)8(bleu)'</span>);
+
+<span class="comment">% 3) Filtre et fspecial</span>
+gaussien = fspecial(<span class="string">'gaussian'</span>, 7, 1);
+image_conv = uint8(convn(seg_albert,gaussien, <span class="string">'same'</span>));
+
+figure;
+imshow(image_conv);
+title(<span class="string">'Albert Avec convolution gaussien'</span>);
+
+<span class="comment">% 4) Filtre de canny (contours)</span>
+img_bin_r = Filtre_Canny(image_conv(:,:,1), gaussien, 100);
+img_bin_g = Filtre_Canny(image_conv(:,:,2), gaussien, 100);
+img_bin_b = Filtre_Canny(image_conv(:,:,3), gaussien, 100);
+
+sum = img_bin_r + img_bin_g + img_bin_b;
+moy = logical(sum ./ 3);
+inv = ~moy;
+
+figure;
+imshow(inv);
+title(<span class="string">'Filtre Contour'</span>);
+
+<span class="comment">% 5)</span>
+image_conv = uint8(conv2(inv .* 255,gaussien, <span class="string">'same'</span>));
+
+figure;
+imshow(image_conv);
+title(<span class="string">'Contour et gaussien'</span>);
+
+<span class="comment">% 6)</span>
+seg_albert(:,:,1) = uint8(double(seg_albert(:,:,1)) .* double(image_conv)/255);
+seg_albert(:,:,2) = uint8(double(seg_albert(:,:,2)) .* double(image_conv)/255);
+seg_albert(:,:,3) = uint8(double(seg_albert(:,:,3)) .* double(image_conv)/255);
+
+figure;
+imshow(seg_albert);
+title(<span class="string">'Albert look peinture'</span>);
+</pre><img vspace="5" hspace="5" src="TP_11.png" alt=""> <img vspace="5" hspace="5" src="TP_12.png" alt=""> <img vspace="5" hspace="5" src="TP_13.png" alt=""> <img vspace="5" hspace="5" src="TP_14.png" alt=""> <img vspace="5" hspace="5" src="TP_15.png" alt=""> <img vspace="5" hspace="5" src="TP_16.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+type Filtre_Canny.m;
+type Calculer_Precision.m;
+type ObtenirLUT.m
+type Segmenter_Couleur.m
+
+%% Exercice 1
+
+% 1) Charger l'image
+imgageVoiture = imread('Formula_Ford.png');
+
+figure;
+imshow(imgageVoiture);
+title('Image Voiture');
+
+% 2) Construction PSF
+PSF = fspecial('motion', 30, 25);
+
+% 3) Deconvolution
+k = 0;
+imageUnblured = deconvwnr(imgageVoiture, PSF, k);
+
+figure;
+imshow(imageUnblured);
+title('Unblured Voiture');
+
+% 4) Meilleure estimation
+I = im2double(imgageVoiture);
+noise_var = 0.0001;
+k = noise_var / var(I(:));
+
+% 5) Deconvoluer image
+imageUnblured = deconvwnr(imgageVoiture, PSF, k);
+
+figure;
+imshow(imageUnblured);
+title('Unblured Voiture (better k)');
+
+% Nous pouvons transmettre que la plaque d'imatriculation est : FF12 FMC
+
+%% Exercice 2
+
+% 1) Charger image
+imageEscalier = imread('escaliers.jpg');
+
+figure;
+imshow(imageEscalier);
+title('Image Escalier');
+
+% 2) Filtre Canny
+gaussien = fspecial('gaussian', 3, 0.5);
+
+img_bin = Filtre_Canny(imageEscalier, gaussien, 80);
+
+figure;
+imshow(img_bin);
+title('Image Binarise final');
+
+% 3) Fonction Calculer_Precision
+
+% 4) Charger image escalier
+escalier_truSeg = imread('escaliers_TrueSeg.jpg') > 128;
+
+% On remarque que plus on diminue le seuil, plus on observe du bruit
+% ambiant (dans les planche du plancher)
+
+% Seuil de 70 => perfo = 0.2696
+% Seuil de 20 => perfo = 0.1994
+
+figure;
+imshow(escalier_truSeg);
+title('True Segmantation');
+[ perfo, tpf, tfn ] = Calculer_Precision(img_bin,escalier_truSeg);
+
+% 5) Detection des lignes verticales 
+
+I = imread('escaliers.jpg');
+BW = edge(I,'canny');
+[H,T,R] = hough(BW,'Theta', -10:.5:10);
+P  = houghpeaks(H,20,'threshold',ceil(0.3*max(H(:))));
+
+lines = houghlines(BW,T,R,P);
+
+figure, imshow(I), hold on
+max_len = 0;
+for k = 1:length(lines)
+   xy = [lines(k).point1; lines(k).point2];
+   plot(xy(:,1),xy(:,2),'LineWidth',2,'Color','green');
+
+   % Plot beginnings and ends of lines
+   plot(xy(1,1),xy(1,2),'x','LineWidth',2,'Color','yellow');
+   plot(xy(2,1),xy(2,2),'x','LineWidth',2,'Color','red');
+
+   % Determine the endpoints of the longest line segment
+   len = norm(lines(k).point1 - lines(k).point2);
+   if ( len > max_len)
+      max_len = len;
+      xy_long = xy;
+   end
+end
+
+%% Exercice 3 - Segmantation par couleurs
+
+% 1) Charger image
+imageChateau = imread('chateau.jpg');
+
+figure;
+imshow(imageChateau);
+title('Image Chateau');
+
+% 2) Fonction ObtenirLUT
+
+% 3) Fonction Segmenter_Couleur
+
+% 4) Segmenter et afficher le chateau
+
+lutTable = ObtenirLUT(8);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 8');
+
+% 5) Determination nombre de segment
+
+lutTable = ObtenirLUT(2);
+seg_chateau = Segmenter_Couleur(imageChateau, lutTable, lutTable, lutTable);
+
+% Comme on peut voir dans la prochaine figure, l'image est identique avec 2
+% segments
+figure;
+imshow(seg_chateau);
+title('Chateau Segmenter en 2');
+
+%% Exercice 4 - Toon/Paint Shading
+
+% 1) Image Show
+image_albert = imread('Albert-Einstein.jpg');
+figure;
+imshow(image_albert);
+title('Albert Einstein');
+
+% 2) Segmentation
+seg_albert = Segmenter_Couleur(image_albert, ObtenirLUT(10), ObtenirLUT(8), ObtenirLUT(8));
+
+figure;
+imshow(seg_albert);
+title('Albert Segmenter en 10(rouge) 8(vert)8(bleu)');
+
+% 3) Filtre et fspecial
+gaussien = fspecial('gaussian', 7, 1);
+image_conv = uint8(convn(seg_albert,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Albert Avec convolution gaussien');
+
+% 4) Filtre de canny (contours)
+img_bin_r = Filtre_Canny(image_conv(:,:,1), gaussien, 100);
+img_bin_g = Filtre_Canny(image_conv(:,:,2), gaussien, 100);
+img_bin_b = Filtre_Canny(image_conv(:,:,3), gaussien, 100);
+
+sum = img_bin_r + img_bin_g + img_bin_b;
+moy = logical(sum ./ 3);
+inv = ~moy;
+
+figure;
+imshow(inv);
+title('Filtre Contour');
+
+% 5) 
+image_conv = uint8(conv2(inv .* 255,gaussien, 'same'));
+
+figure;
+imshow(image_conv);
+title('Contour et gaussien');
+
+% 6)
+seg_albert(:,:,1) = uint8(double(seg_albert(:,:,1)) .* double(image_conv)/255);
+seg_albert(:,:,2) = uint8(double(seg_albert(:,:,2)) .* double(image_conv)/255);
+seg_albert(:,:,3) = uint8(double(seg_albert(:,:,3)) .* double(image_conv)/255);
+
+figure;
+imshow(seg_albert);
+title('Albert look peinture');
+
+##### SOURCE END #####
+--></body></html>
