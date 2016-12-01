@@ -411,32 +411,51 @@ int gather_result(ctx_t *ctx, opts_t *opts) {
 		grid_t* grid;
 
 		int other_process_count = ctx->numprocs-1;
-
-		MPI_Request *req = (MPI_Request *) calloc(other_process_count, sizeof(MPI_Request));
-		MPI_Status *status = (MPI_Status *) calloc(other_process_count, sizeof(MPI_Status));
-
 		
+		// Receiving others process grids
 		if(other_process_count > 0)
-		{			
+		{	
+			MPI_Request *req = (MPI_Request *) calloc(other_process_count, sizeof(MPI_Request));
+			MPI_Status *status = (MPI_Status *) calloc(other_process_count, sizeof(MPI_Status));
+
+
 		    int process_index;
 		    for (process_index = 1; process_index <= other_process_count; ++process_index)
 		    {
 		    	// Get coords
-		    	int processCoordinates[2];
-		        MPI_Cart_coords(ctx->comm2d, process_index, DIM_2D, processCoordinates);
+		    	int slave_coords[DIM_2D];
+		        MPI_Cart_coords(ctx->comm2d, slave_coords, DIM_2D, slave_coords);
 
 		        // Get grid
-		        grid = cart2d_get_grid(ctx->cart, processCoordinates[0], processCoordinates[1]);
+		        grid = cart2d_get_grid(ctx->cart, slave_coords[0], slave_coords[1]);
 
 		        // Get grid for this process
 		        int grid_size = grid->height*grid->width;
-		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, process_index, tag_gather, ctx->comm2d, req + process_index-1);
+		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, slave_coords, tag_gather, ctx->comm2d, req + slave_coords - 1);
 		    }
-		}
-		MPI_Waitall(other_process_count, req, status);
 
-		free(req);
-		free(status);
+			MPI_Waitall(other_process_count, req, status);
+
+			free(req);
+			free(status);
+
+		}
+
+		grid_t* master_grid;
+
+		// Get coord
+		int master_coords[DIM_2D];
+		MPI_Cart_coords(ctx->comm2d, 0, DIM_2D, master_coords);
+
+		// Get master grid
+		master_grid = cart2d_get_grid(ctx->cart, master_coords[0], master_coords[1]);
+		grid_copy(ctx->next_grid, master_grid);
+
+		// Merge all data in global grid
+		cart2d_grid_merge(ctx->cart, ctx->global_grid);
+
+		free(master_grid);
+
 	}
 	// Slave send data to master (0)
     else
@@ -444,20 +463,14 @@ int gather_result(ctx_t *ctx, opts_t *opts) {
         MPI_Request req;
         MPI_Status status;
 
-        // Get local grid
-        grid_t* grid = grid_padding(ctx->next_grid, 0);
-
         // Send grid to master
-        int grid_size = grid->height*grid->width;
-        MPI_Isend(grid->dbl, grid_size, MPI_DOUBLE, 0, tag_gather, ctx->comm2d, &req);
+        int grid_size = local_grid->height*local_grid->width;
+        MPI_Isend(local_grid->dbl, grid_size, MPI_DOUBLE, 0, tag_gather, ctx->comm2d, &req);
         MPI_Waitall(1, &req, &status);
     }
 
-	// Merge all data in global grid
-	cart2d_grid_merge(ctx->cart, ctx->global_grid);
 
-
-	done: 
+	done: free_grid(local_grid);
 		return ret;
 	err: ret = -1;
 	goto done;
