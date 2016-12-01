@@ -2,7 +2,7 @@
 # verifie si heatsim s'execute correctement pour les entrees du banc de test
 
 do_run() {
-	cmd="mpirun -np $1 ../src/heatsim --input simple.png --dimx $2 --dimy $3 --iter 100 --output simple_$1_$2_$3.png"
+	cmd="/usr/lib64/openmpi/bin/mpirun -np $1 ../src/heatsim --input simple.png --dimx $2 --dimy $3 --iter 100 --output simple_$1_$2_$3.png"
 	$cmd
 	RET=$?
 	if [ $RET -ne 0 ]; then
