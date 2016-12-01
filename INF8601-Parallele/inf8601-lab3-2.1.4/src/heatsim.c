@@ -454,8 +454,6 @@ int gather_result(ctx_t *ctx, opts_t *opts) {
 		// Merge all data in global grid
 		cart2d_grid_merge(ctx->cart, ctx->global_grid);
 
-		free(master_grid);
-
 	}
 	// Slave send data to master (0)
     else
