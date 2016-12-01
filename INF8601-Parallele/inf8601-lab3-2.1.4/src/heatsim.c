@@ -424,14 +424,14 @@ int gather_result(ctx_t *ctx, opts_t *opts) {
 		    {
 		    	// Get coords
 		    	int slave_coords[DIM_2D];
-		        MPI_Cart_coords(ctx->comm2d, slave_coords, DIM_2D, slave_coords);
+		        MPI_Cart_coords(ctx->comm2d, process_index, DIM_2D, slave_coords);
 
 		        // Get grid
 		        grid = cart2d_get_grid(ctx->cart, slave_coords[0], slave_coords[1]);
 
 		        // Get grid for this process
 		        int grid_size = grid->height*grid->width;
-		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, slave_coords, tag_gather, ctx->comm2d, req + slave_coords - 1);
+		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, process_index, tag_gather, ctx->comm2d, req + process_index - 1);
 		    }
 
 			MPI_Waitall(other_process_count, req, status);
