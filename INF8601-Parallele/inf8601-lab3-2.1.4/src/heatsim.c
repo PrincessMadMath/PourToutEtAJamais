@@ -431,7 +431,7 @@ int gather_result(ctx_t *ctx, opts_t *opts) {
 
 		        // Get grid for this process
 		        int grid_size = grid->height*grid->width;
-		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, process_index, tag_gather, ctx->comm2d, req + process_index - 1);
+		        MPI_Irecv(grid->dbl, grid_size, MPI_DOUBLE, process_index, tag_gather, ctx->comm2d, req + (process_index - 1));
 		    }
 
 			MPI_Waitall(other_process_count, req, status);
